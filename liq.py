@@ -441,7 +441,7 @@ try:
   ]
 
   filas_tabla = []
-  base_subtotal = tasa_mensual
+  sub_c_acumulado = tasa_mensual  # Arranca con el valor base de la cuota 1
 
   for i in range(1, 13):
     pct = porcentajes_aumento[i - 1]
@@ -451,8 +451,11 @@ try:
         else f"CUOTA {i}-2026 (0%)"
     )
 
-    factor_ajuste = 1.0 + (pct / 100.0)
-    sub_c = round(base_subtotal * factor_ajuste, 2)
+    # Si hay porcentaje de aumento, se acumula de forma compuesta sobre la cuota anterior
+    if pct > 0:
+      sub_c_acumulado = round(sub_c_acumulado * (1.0 + (pct / 100.0)), 2)
+
+    sub_c = sub_c_acumulado
 
     # Descuentos en cascada para cada cuota
     m_bc_c = round(sub_c * 0.10, 2) if var_bc == "SI" else 0.0
@@ -466,7 +469,8 @@ try:
     prot_c = round(sub_c * 0.095, 2)
     salud_c = round(sub_c * 0.105, 2)
 
-    m_edenor_c = round(monto_edenor / 12, 2) if monto_edenor > 0 else 0.0
+    # El descuento de Edenor toma el valor completo cargado por el usuario (sin dividir por 12)
+    m_edenor_c = monto_edenor
 
     total_cuota = round(sub_desc_c + prot_c + salud_c - m_edenor_c, 2)
 
