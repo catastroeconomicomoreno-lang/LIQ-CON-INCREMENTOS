@@ -39,7 +39,7 @@ st.markdown(
             gap: 8px !important;
         }
         
-        /* Cajas de resultados y celdas de la tabla con el formato exacto superior */
+        /* Cajas de resultados y celdas con texto fino/normal */
         .resultado-box {
             background-color: #ffffff !important;
             padding: 5px 10px !important;
@@ -54,16 +54,15 @@ st.markdown(
             min-height: 28px !important;
         }
         
-        /* Cabeceras de la tabla con el mismo estilo limpio y tipografía */
         .tabla-header {
             background-color: #ffffff !important;
             color: #1e293b !important;
-            font-weight: bold;
+            font-weight: normal;
             text-align: center;
-            padding: 5px 10px !important;
+            padding: 5px 6px !important;
             border: 1px solid #cbd5e1 !important;
             border-radius: 4px !important;
-            font-size: 12px !important;
+            font-size: 11px !important;
             text-transform: uppercase;
             min-height: 28px !important;
             display: flex;
@@ -76,7 +75,7 @@ st.markdown(
             background-color: #ffffff;
             border: 1px solid #cbd5e1;
             padding: 6px 10px;
-            font-weight: bold;
+            font-weight: normal;
             text-align: center;
             margin-bottom: 4px;
             border-radius: 4px;
@@ -87,21 +86,21 @@ st.markdown(
         .resultado-label {
             font-family: Arial, sans-serif !important;
             color: #1e293b !important;
-            font-weight: bold;
+            font-weight: normal !important;
             font-size: 12px !important;
         }
         
         .resultado-valor {
             font-family: Arial, sans-serif !important;
             color: #1e293b !important;
-            font-weight: bold;
+            font-weight: normal !important;
             font-size: 12px !important;
         }
         
         .stButton>button {
             background-color: #0284c7 !important;
             color: white !important;
-            font-weight: bold !important;
+            font-weight: normal !important;
             border-radius: 4px !important;
             border: none !important;
             padding: 6px 12px !important;
@@ -159,7 +158,7 @@ with col_f1_4:
 st.markdown("---")
 
 st.markdown(
-    "<p style='font-weight: bold; margin-bottom: 2px;'>DESCUENTOS:</p>",
+    "<p style='font-weight: normal; margin-bottom: 2px;'>DESCUENTOS:</p>",
     unsafe_allow_html=True,
 )
 col_desc1, col_desc2, col_desc3, col_desc4 = st.columns(4)
@@ -321,8 +320,8 @@ try:
   st.markdown("---")
   st.markdown(
       "<p style='font-family: Arial, sans-serif; font-size: 12px; font-weight:"
-      " bold; text-transform: uppercase; margin-bottom: 4px;'>BASE IMPONIBLE Y"
-      " COEFICIENTES</p>",
+      " normal; text-transform: uppercase; margin-bottom: 4px;'>BASE IMPONIBLE"
+      " Y COEFICIENTES</p>",
       unsafe_allow_html=True,
   )
 
@@ -399,14 +398,14 @@ try:
   st.markdown(
       f"""
         <div class="resultado-box" style="border: 2px solid #1e293b !important; margin-top: 4px; padding: 6px 10px;">
-            <span class="resultado-label" style="font-size: 13px; font-weight: bold;">TSG Total:</span>
-            <span class="resultado-valor" style="font-size: 13px; font-weight: bold;">{tasa_total_str}</span>
+            <span class="resultado-label" style="font-size: 13px;">TSG Total:</span>
+            <span class="resultado-valor" style="font-size: 13px;">{tasa_total_str}</span>
         </div>
         """,
       unsafe_allow_html=True,
   )
 
-  # --- TABLA DE CUOTAS CON FORMATO UNIFICADO ---
+  # --- TABLA DE CUOTAS CON PRIMERA COLUMNA ANGOSTA Y TEXTO FINO ---
   st.markdown("<br>", unsafe_allow_html=True)
 
   st.markdown(
@@ -418,8 +417,9 @@ try:
       unsafe_allow_html=True,
   )
 
+  # Primera columna achicada (proporción 0.9 en vez de 1.5)
   col_t1, col_t2, col_t3, col_t4, col_t5, col_t6, col_t7 = st.columns(
-      [1.5, 1, 1, 1, 1, 1, 1]
+      [0.9, 1, 1, 1, 1, 1, 1]
   )
   with col_t1:
     st.markdown('<div class="tabla-header">CUOTAS</div>', unsafe_allow_html=True)
@@ -466,9 +466,9 @@ try:
   for i in range(1, 13):
     pct = porcentajes_aumento[i - 1]
     nombre_cuota = (
-        f"CUOTA {i}-2026 ({pct}%)".replace(".0%", "%")
+        f"C.{i} ({pct}%)".replace(".0%", "%")
         if pct > 0
-        else f"CUOTA {i}-2026 (0%)"
+        else f"C.{i} (0%)"
     )
 
     if pct > 0:
@@ -495,7 +495,7 @@ try:
       total_cuota = 8900.0 if estado_sel == "BALDIO" else 4500.0
 
     r_c1, r_c2, r_c3, r_c4, r_c5, r_c6, r_c7 = st.columns(
-        [1.5, 1, 1, 1, 1, 1, 1]
+        [0.9, 1, 1, 1, 1, 1, 1]
     )
 
     with r_c1:
