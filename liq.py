@@ -13,6 +13,7 @@ ruta_encabezado = os.path.join(ruta_base, "encabezado.png")
 if os.path.exists(ruta_encabezado):
   st.image(ruta_encabezado, use_container_width=True)
 
+# Estilos CSS con tarjetas súper comprimidas y tipografía optimizada para A4
 st.markdown(
     """
     <style>
@@ -20,49 +21,50 @@ st.markdown(
         label, p, span, div, [data-testid="stWidgetLabel"] p, .stMarkdown p {
             font-family: Arial, sans-serif !important;
             color: #1e293b !important;
-            font-size: 13px !important;
+            font-size: 12px !important;
         }
         
         div[data-testid="stMarkdownContainer"] p, .stRadio label {
             font-family: Arial, sans-serif !important;
             color: #1e293b !important;
-            font-size: 13px !important;
+            font-size: 12px !important;
         }
         
         [data-testid="stWidgetLabel"] {
-            margin-bottom: 2px !important;
+            margin-bottom: 1px !important;
             padding-bottom: 0px !important;
         }
         
         div.row-widget.stRadio > div {
             flex-direction: row !important;
-            gap: 10px !important;
+            gap: 8px !important;
         }
         
-        .resultado-box {
+        /* Tarjetas de resultados ultracompactas */
+        .resultado-box-mini {
             background-color: #ffffff !important;
-            padding: 5px 8px;
-            border-radius: 4px;
+            padding: 3px 6px;
+            border-radius: 3px;
             border: 1px solid #cbd5e1 !important;
-            margin-bottom: 3px;
+            margin-bottom: 2px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+            box-shadow: 0 1px 1px rgba(0,0,0,0.02);
         }
         
-        .resultado-label {
+        .resultado-label-mini {
             font-family: Arial, sans-serif !important;
-            color: #1e293b !important;
+            color: #475569 !important;
             font-weight: bold;
-            font-size: 13px !important;
+            font-size: 11px !important;
         }
         
-        .resultado-valor {
+        .resultado-valor-mini {
             font-family: Arial, sans-serif !important;
-            color: #1e293b !important;
+            color: #0f172a !important;
             font-weight: bold;
-            font-size: 13px !important;
+            font-size: 11px !important;
         }
         
         .stButton>button {
@@ -71,16 +73,16 @@ st.markdown(
             font-weight: bold !important;
             border-radius: 4px !important;
             border: none !important;
-            padding: 8px 16px !important;
+            padding: 6px 12px !important;
             width: 100% !important;
-            font-size: 13px !important;
+            font-size: 12px !important;
         }
 
         @media print {
             body, .stApp, [data-testid="stAppViewContainer"] {
                 background-color: #ffffff !important;
                 color: #000000 !important;
-                font-size: 9pt !important;
+                font-size: 8pt !important;
             }
             header, [data-testid="stSidebar"], [data-testid="stHeader"], .stDeployButton, [data-testid="stDecoration"] {
                 display: none !important;
@@ -97,7 +99,7 @@ st.markdown(
                 padding-bottom: 0 !important;
                 max-width: 100% !important;
             }
-            .resultado-box {
+            .resultado-box-mini {
                 border: 1px solid #cbd5e1 !important;
                 page-break-inside: avoid !important;
             }
@@ -289,96 +291,72 @@ try:
 
   st.markdown("---")
   st.markdown(
-      "<p style='font-family: Arial, sans-serif; font-size: 13px; font-weight:"
-      " bold; text-transform: uppercase; margin-bottom: 8px;'>BASE IMPONIBLE Y"
+      "<p style='font-family: Arial, sans-serif; font-size: 12px; font-weight:"
+      " bold; text-transform: uppercase; margin-bottom: 4px;'>BASE IMPONIBLE Y"
       " COEFICIENTES</p>",
       unsafe_allow_html=True,
   )
 
-  c_bi, c_ca, c_cu, c_cb, c_cap = st.columns(5)
-  with c_bi:
-    st.markdown(
-        f'<div class="resultado-box"><span'
-        f' class="resultado-label">BI:</span><span'
-        f' class="resultado-valor">{bi_str}</span></div>',
-        unsafe_allow_html=True,
-    )
-  with c_ca:
-    st.markdown(
-        f'<div class="resultado-box"><span'
-        f' class="resultado-label">CA:</span><span'
-        f' class="resultado-valor">{ca}</span></div>',
-        unsafe_allow_html=True,
-    )
-  with c_cu:
-    st.markdown(
-        f'<div class="resultado-box"><span'
-        f' class="resultado-label">CU:</span><span'
-        f' class="resultado-valor">{cu}</span></div>',
-        unsafe_allow_html=True,
-    )
-  with c_cb:
-    st.markdown(
-        f'<div class="resultado-box"><span'
-        f' class="resultado-label">CB:</span><span'
-        f' class="resultado-valor">{cb}</span></div>',
-        unsafe_allow_html=True,
-    )
-  with c_cap:
-    st.markdown(
-        f'<div class="resultado-box"><span'
-        f' class="resultado-label">CAP:</span><span'
-        f' class="resultado-valor">{cap}</span></div>',
-        unsafe_allow_html=True,
-    )
+  # Layout ultracomprimido en 4 columnas para ocupar mucho menos espacio vertical
+  c1, c2, c3, c4 = st.columns(4)
 
 
-  def caja_horizontal(descripcion, valor_texto, columna_destino):
-    with columna_destino:
+  def caja_mini(descripcion, valor_texto, columna):
+    with columna:
       st.markdown(
           f"""
-                <div class="resultado-box">
-                    <span class="resultado-label">{descripcion}</span>
-                    <span class="resultado-valor">{valor_texto}</span>
+                <div class="resultado-box-mini">
+                    <span class="resultado-label-mini">{descripcion}</span>
+                    <span class="resultado-valor-mini">{valor_texto}</span>
                 </div>
                 """,
           unsafe_allow_html=True,
       )
 
 
-  f1_c1, f1_c2, f1_c3 = st.columns(3)
-  caja_horizontal("Límite inferior:", lim_str, f1_c1)
-  caja_horizontal("Alícuota:", alic_str, f1_c2)
-  caja_horizontal("CFA:", cfa_str, f1_c3)
+  # Columna 1: Coeficientes base
+  caja_mini("BI:", bi_str, c1)
+  caja_mini("CA:", str(ca), c1)
+  caja_mini("CU:", str(cu), c1)
 
-  f2_c1, f2_c2, f2_c3 = st.columns(3)
-  caja_horizontal("TSG Anual:", tasa_anual_str, f2_c1)
-  caja_horizontal("TSG Mensual:", tasa_mensual_str, f2_c2)
+  # Columna 2: Coeficientes y Alícuota
+  caja_mini("CB:", str(cb), c2)
+  caja_mini("CAP:", str(cap), c2)
+  caja_mini("Alícuota:", alic_str, c2)
 
-  f3_c1, f3_c2, f3_c3 = st.columns(3)
-  caja_horizontal("Tasa de Salud:", tasa_salud_str, f3_c1)
-  caja_horizontal("Tasa de Protección:", tasa_prot_str, f3_c2)
-  caja_horizontal("EDENOR:", edenor_str, f3_c3)
+  # Columna 3: Montos base y Tasas adicionales
+  caja_mini("Límite inf:", lim_str, c3)
+  caja_mini("CFA:", cfa_str, c3)
+  caja_mini("TSG Anual:", tasa_anual_str, c3)
 
-  f4_c1, f4_c2, f4_c3 = st.columns(3)
-  caja_horizontal("BC:", bc_str, f4_c1)
-  caja_horizontal("DA:", da_str, f4_c2)
-  caja_horizontal("BE:", be_str, f4_c3)
+  # Columna 4: Mensual, Salud, Protección y Descuentos agrupados
+  caja_mini("TSG Mens:", tasa_mensual_str, c4)
+  caja_mini("Salud:", tasa_salud_str, c4)
+  caja_mini("Protección:", tasa_prot_str, c4)
 
+  # Fila inferior compacta para Descuentos / Edenor y el Total general destacado
+  d1, d2, d3, d4, d5 = st.columns(5)
+  caja_mini("BC:", bc_str, d1)
+  caja_mini("DA:", da_str, d2)
+  caja_mini("BE:", be_str, d3)
+  caja_mini("Edenor:", edenor_str, d4)
+  caja_mini("TSG Total:", tasa_total_str, d5)
+
+  # Cuadro Totalizador principal resaltado pero compacto
   st.markdown(
       f"""
-        <div class="resultado-box" style="border: 2px solid #1e293b !important; margin-top: 6px; padding: 8px 12px;">
-            <span class="resultado-label" style="font-size: 13px; font-weight: bold;">TSG Total:</span>
-            <span class="resultado-valor" style="font-size: 13px; font-weight: bold;">{tasa_total_str}</span>
+        <div class="resultado-box-mini" style="border: 2px solid #0284c7 !important; margin-top: 4px; padding: 6px 10px; background-color: #f0f9ff !important;">
+            <span class="resultado-label-mini" style="font-size: 13px; font-weight: bold; color: #0369a1;">MONTO FINAL TSG TOTAL:</span>
+            <span class="resultado-valor-mini" style="font-size: 13px; font-weight: bold; color: #0369a1;">{tasa_total_str}</span>
         </div>
         """,
       unsafe_allow_html=True,
   )
 
-  # --- CUADRO DE AJUSTES CON DATAFRAME DE PANDAS (100% Robusto, sin errores de HTML) ---
+  # --- TABLA DE CUOTAS COMPRIMIDA (Con Pandas DataFrame) ---
   st.markdown("<br>", unsafe_allow_html=True)
   st.markdown(
-      "<p style='font-family: Arial, sans-serif; font-size: 13px; font-weight:"
+      "<p style='font-family: Arial, sans-serif; font-size: 12px; font-weight:"
       " bold; text-align: center; text-transform: uppercase; margin-bottom:"
       " 2px;'>2026 - Aplicación Art. 15° Ord. Fiscal 7437/2024 TO 2025</p>",
       unsafe_allow_html=True,
@@ -436,16 +414,15 @@ try:
     filas_tabla.append({
         "Cuota": nombre_cuota,
         "Subtotal": fmt(sub_c),
-        "Desc. BC": f"-{fmt(m_bc_c)}",
-        "Desc. DA": f"-{fmt(m_da_c)}",
-        "Desc. BE": f"-{fmt(m_be_c)}",
-        "Desc. Edenor": f"-{fmt(m_edenor_c)}",
+        "BC": f"-{fmt(m_bc_c)}",
+        "DA": f"-{fmt(m_da_c)}",
+        "BE": f"-{fmt(m_be_c)}",
+        "Edenor": f"-{fmt(m_edenor_c)}",
         "Total Cuota": fmt(total_cuota),
     })
 
   df_cuotas = pd.DataFrame(filas_tabla)
 
-  # Renderizamos con st.dataframe utilizando el ancho completo del contenedor (evita que falle el HTML)
   st.dataframe(df_cuotas, use_container_width=True, hide_index=True)
   # -----------------------------------------------------------------------------------------
 
