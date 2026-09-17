@@ -190,7 +190,7 @@ with col_desc4:
 
 st.markdown("---")
 
-# Ubicados al lado: Liberar Tope y Prototípico
+# Ubicación de Liberar Tope y Valuación Prototípica al lado
 col_tope1, col_tope2, col_tope3 = st.columns(3)
 with col_tope1:
   var_tope = st.radio("Liberar Tope:", ["NO", "SI"])
@@ -199,40 +199,57 @@ with col_tope2:
 
 st.markdown("---")
 
+# Captura previa de superficies para poder calcular el prototípico antes de definir la valuación
 col_sup1, col_sup2, col_val1, col_val2 = st.columns(4)
 with col_sup1:
   entry_sup_terreno = st.text_input("Superficie de Terreno (m²):", "300,00")
 with col_sup2:
   entry_sup_edificada = st.text_input("Superficie Edificada (m²):", "0,00")
-with col_val1:
-  entry_va = st.text_input("Valuación ($):", "300000,00")
+
+# Cálculo preliminar de superficies para aplicar la fórmula prototípica
+try:
+  sup_terreno_pre = (
+      float(entry_sup_terreno.replace(".", "").replace(",", "."))
+      if entry_sup_terreno
+      else 0.0
+  )
+  sup_edificada_pre = (
+      float(entry_sup_edificada.replace(".", "").replace(",", "."))
+      if entry_sup_edificada
+      else 0.0
+  )
+except ValueError:
+  sup_terreno_pre = 0.0
+  sup_edificada_pre = 0.0
+
+if sup_terreno_pre <= 10000:
+  val_terreno_proto = sup_terreno_pre * 5 * 1261.39
+else:
+  val_terreno_proto = sup_terreno_pre * 10 * 1261.39
+
+val_edificado_proto = sup_edificada_pre * 50 * 1261.39
+valuacion_prototipica_calc = round(val_terreno_proto + val_edificado_proto, 2)
+
+# Si es prototípico SÍ, el valor se autocompleta. Si es NO, queda editable por el usuario.
+if var_prototipico == "SI":
+  default_val_str = f"{valuacion_prototipica_calc:,.2f}".replace(
+      ",", "X"
+  ).replace(".", ",").replace("X", ".")
+  with col_val1:
+    entry_va = st.text_input("Valuación ($):", value=default_val_str, disabled=True)
+else:
+  with col_val1:
+    entry_va = st.text_input("Valuación ($):", value="300000,00")
+
 with col_val2:
   var_anio = st.selectbox(
       "Valuación año:", ["2023 o anterior", "2024", "2025", "2026"]
   )
 
 try:
-  sup_terreno = (
-      float(entry_sup_terreno.replace(".", "").replace(",", "."))
-      if entry_sup_terreno
-      else 0.0
-  )
-  sup_edificada = (
-      float(entry_sup_edificada.replace(".", "").replace(",", "."))
-      if entry_sup_edificada
-      else 0.0
-  )
+  sup_terreno = sup_terreno_pre
+  sup_edificada = sup_edificada_pre
 
-  # Cálculo de Valuación Prototípica según las reglas indicadas
-  if sup_terreno <= 10000:
-    val_terreno_proto = sup_terreno * 5 * 1261.39
-  else:
-    val_terreno_proto = sup_terreno * 10 * 1261.39
-
-  val_edificado_proto = sup_edificada * 50 * 1261.39
-  valuacion_prototipica_calc = round(val_terreno_proto + val_edificado_proto, 2)
-
-  # Si el usuario selecciona Prototípico SÍ, se inserta automáticamente en la valuación
   if var_prototipico == "SI":
     va = valuacion_prototipica_calc
   else:
