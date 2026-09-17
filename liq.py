@@ -1,4 +1,440 @@
-# --- CUADRO DE AJUSTES MODERNIZADO (Art. 15 Ord. Fiscal 7437/2024 TO 2025) ---
+import os
+import pandas as pd
+import streamlit as st
+
+st.set_page_config(
+    page_title="LIQUIDADOR TASAS POR SERVICIOS GENERALES - MUNICIPIO DE MORENO",
+    layout="wide",
+)
+
+# Detectar de forma segura la carpeta donde está corriendo tu app
+ruta_base = os.path.dirname(__file__)
+ruta_encabezado = os.path.join(ruta_base, "encabezado.png")
+
+# --- IMAGEN DE ENCABEZADO ---
+if os.path.exists(ruta_encabezado):
+    st.image(ruta_encabezado, use_container_width=True)
+
+# Estilos CSS estrictos: unifica fuente (Arial), tamaño (13px) y color (#1e293b) en toda la aplicación
+st.markdown(
+    """
+    <style>
+        .stApp, html, body, [data-testid="stAppViewContainer"],
+        label, p, span, div, [data-testid="stWidgetLabel"] p, .stMarkdown p {
+            font-family: Arial, sans-serif !important;
+            color: #1e293b !important;
+            font-size: 13px !important;
+        }
+        
+        div[data-testid="stMarkdownContainer"] p, .stRadio label {
+            font-family: Arial, sans-serif !important;
+            color: #1e293b !important;
+            font-size: 13px !important;
+        }
+        
+        [data-testid="stWidgetLabel"] {
+            margin-bottom: 2px !important;
+            padding-bottom: 0px !important;
+        }
+        
+        div.row-widget.stRadio > div {
+            flex-direction: row !important;
+            gap: 10px !important;
+        }
+        
+        .resultado-box {
+            background-color: #ffffff !important;
+            padding: 5px 8px;
+            border-radius: 4px;
+            border: 1px solid #cbd5e1 !important;
+            margin-bottom: 3px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+        }
+        
+        .resultado-label {
+            font-family: Arial, sans-serif !important;
+            color: #1e293b !important;
+            font-weight: bold;
+            font-size: 13px !important;
+        }
+        
+        .resultado-valor {
+            font-family: Arial, sans-serif !important;
+            color: #1e293b !important;
+            font-weight: bold;
+            font-size: 13px !important;
+        }
+        
+        /* Estilo moderno y compacto para la tabla de cuotas en A4 */
+        .tabla-moderna-cuotas {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 6px;
+            margin-bottom: 6px;
+            font-size: 12px !important;
+            background-color: #ffffff;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .tabla-moderna-cuotas th {
+            background-color: #f8fafc;
+            color: #0f172a !important;
+            font-weight: bold;
+            text-align: center;
+            padding: 6px 4px;
+            border-bottom: 2px solid #e2e8f0;
+            font-size: 11px !important;
+            text-transform: uppercase;
+        }
+        .tabla-moderna-cuotas td {
+            padding: 5px 6px;
+            border-bottom: 1px solid #f1f5f9;
+            text-align: right;
+            font-family: Arial, sans-serif !important;
+            color: #1e293b !important;
+            font-size: 12px !important;
+        }
+        .tabla-moderna-cuotas tr:last-child td {
+            border-bottom: none;
+        }
+        .tabla-moderna-cuotas td:first-child {
+            text-align: left;
+            font-weight: bold;
+            color: #0284c7 !important;
+        }
+        .td-total-cuota {
+            font-weight: bold;
+            background-color: #f8fafc;
+            color: #0f172a !important;
+        }
+        
+        .stButton>button {
+            background-color: #0284c7 !important;
+            color: white !important;
+            font-weight: bold !important;
+            border-radius: 4px !important;
+            border: none !important;
+            padding: 8px 16px !important;
+            width: 100% !important;
+            font-size: 13px !important;
+        }
+
+        @media print {
+            body, .stApp, [data-testid="stAppViewContainer"] {
+                background-color: #ffffff !important;
+                color: #000000 !important;
+                font-size: 9pt !important;
+            }
+            header, [data-testid="stSidebar"], [data-testid="stHeader"], .stDeployButton, [data-testid="stDecoration"] {
+                display: none !important;
+            }
+            .stButton {
+                display: none !important;
+            }
+            [data-testid="stAppViewContainer"] {
+                overflow: visible !important;
+                position: static !important;
+            }
+            .block-container {
+                padding-top: 0 !important;
+                padding-bottom: 0 !important;
+                max-width: 100% !important;
+            }
+            .resultado-box, .tabla-moderna-cuotas {
+                border: 1px solid #cbd5e1 !important;
+                page-break-inside: avoid !important;
+            }
+        }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+st.markdown("<br>", unsafe_allow_html=True)
+
+# Partida municipal centrada
+col_p1, col_p2, col_p3 = st.columns(3)
+with col_p2:
+    entry_partida = st.text_input("PARTIDA MUNICIPAL N°:")
+
+st.markdown("---")
+
+# Fila 1 de Controles
+col_f1_1, col_f1_2, col_f1_3, col_f1_4 = st.columns(4)
+with col_f1_1:
+    var_estado = st.radio("Estado:", ["EDIFICADO", "BALDIO"])
+with col_f1_2:
+    var_uso = st.radio("Uso:", ["RESIDENCIAL", "COMERCIAL", "INDUSTRIAL"])
+with col_f1_3:
+    var_acceso = st.radio("Acceso Principal:", ["NO", "SI"])
+with col_f1_4:
+    var_zonif = st.selectbox("Zonificación:", ["A/B", "F", "OTRA"])
+
+st.markdown("---")
+
+# Fila de Descuentos
+st.markdown(
+    "<p style='font-weight: bold; margin-bottom: 2px;'>DESCUENTOS:</p>",
+    unsafe_allow_html=True,
+)
+col_desc1, col_desc2, col_desc3, col_desc4 = st.columns(4)
+with col_desc1:
+    var_bc = st.radio(
+        "Buen Contribuyente (BC 10%):", ["NO", "SI"], horizontal=True
+    )
+with col_desc2:
+    var_da = st.radio(
+        "Débito Automático (DA 10%):", ["NO", "SI"], horizontal=True
+    )
+with col_desc3:
+    var_be = st.radio(
+        "Boleta Electrónica (BE 5%):", ["NO", "SI"], horizontal=True
+    )
+with col_desc4:
+    entry_edenor = st.text_input("EDENOR ($):", "0,00")
+
+st.markdown("---")
+
+# Fila abajo de todo para Liberar Tope
+col_tope1, col_tope2, col_tope3 = st.columns(3)
+with col_tope1:
+    var_tope = st.radio("Liberar Tope:", ["NO", "SI"])
+
+st.markdown("---")
+
+# Superficies y Valuaciones
+col_sup1, col_sup2, col_val1, col_val2 = st.columns(4)
+with col_sup1:
+    entry_sup_terreno = st.text_input("Superficie de Terreno (m²):", "300,00")
+with col_sup2:
+    entry_sup_edificada = st.text_input("Superficie Edificada (m²):", "0,00")
+with col_val1:
+    entry_va = st.text_input("Valuación ($):", "300000,00")
+with col_val2:
+    var_anio = st.selectbox(
+        "Valuación año:", ["2023 o anterior", "2024", "2025", "2026"]
+    )
+
+# Lógica de cálculo principal
+try:
+  va = float(entry_va.replace(".", "").replace(",", ".")) if entry_va else 0.0
+  sup_terreno = (
+      float(entry_sup_terreno.replace(".", "").replace(",", "."))
+      if entry_sup_terreno
+      else 0.0
+  )
+  sup_edificada = (
+      float(entry_sup_edificada.replace(".", "").replace(",", "."))
+      if entry_sup_edificada
+      else 0.0
+  )
+
+  estado_sel = var_estado
+  uso_sel = var_uso
+  anio_sel = var_anio
+
+  if anio_sel == "2023 o anterior":
+    ca = 19.10
+  elif anio_sel == "2024":
+    ca = 2.76
+  elif anio_sel == "2025":
+    ca = 1.36
+  else:
+    ca = 1.00
+
+  if uso_sel == "RESIDENCIAL":
+    cu = 1.0
+  elif uso_sel == "COMERCIAL":
+    cu = 1.1
+  else:
+    cu = 1.25
+
+  if estado_sel == "EDIFICADO":
+    cb = 1.0
+  else:
+    cb = 1.6 if sup_terreno <= 500 else 1.7 if sup_terreno <= 5000 else 2.0
+
+  if var_acceso == "SI":
+    if uso_sel == "RESIDENCIAL" and estado_sel == "EDIFICADO":
+      cap = 1.2
+    elif estado_sel == "BALDIO":
+      cap = 1.6
+    else:
+      cap = 1.5
+  else:
+    cap = 1.0
+
+  bi = round(va * ca * cu * cb * cap, 2)
+
+  if bi <= 5730000:
+    lim_inf, cfa_val, alic = 0.0, 107883.00, 0.0
+  elif bi <= 6446250:
+    lim_inf, cfa_val, alic = 5730000.0, 107883.00, 0.0150
+  elif bi <= 7305750:
+    lim_inf, cfa_val, alic = 6446250.0, 123095.84, 0.0152
+  elif bi <= 8165250:
+    lim_inf, cfa_val, alic = 7305750.0, 141843.90, 0.0154
+  elif bi <= 12892500:
+    lim_inf, cfa_val, alic = 8165250.0, 160838.66, 0.0156
+  elif bi <= 21487500:
+    lim_inf, cfa_val, alic = 12892500.0, 328337.79, 0.0160
+  elif bi <= 30082500:
+    lim_inf, cfa_val, alic = 21487500.0, 649028.37, 0.0164
+  elif bi <= 38677500:
+    lim_inf, cfa_val, alic = 30082500.0, 838975.84, 0.0169
+  elif bi <= 47272500:
+    lim_inf, cfa_val, alic = 38677500.0, 1096761.73, 0.0170
+  elif bi <= 154447750:
+    lim_inf, cfa_val, alic = 47272500.0, 1633008.75, 0.0171
+  elif bi <= 1000000000:
+    lim_inf, cfa_val, alic = 154447750.0, 4201777.78, 0.0173
+  else:
+    lim_inf, cfa_val, alic = 1000000000.0, 25380696.47, 0.0183
+
+  excedente = max(0.0, bi - lim_inf)
+  tasa_anual = round(((excedente * alic) + cfa_val), 2)
+  tasa_mensual = round(tasa_anual / 12, 2)
+
+  tasa_proteccion = round(tasa_mensual * 0.095, 2)
+  tasa_salud = round(tasa_mensual * 0.105, 2)
+
+  # --- CÁLCULO DE DESCUENTOS EN CASCADA (RESUMEN) ---
+  monto_bc = round(tasa_mensual * 0.10, 2) if var_bc == "SI" else 0.0
+  base_da = tasa_mensual - monto_bc
+  monto_da = round(base_da * 0.10, 2) if var_da == "SI" else 0.0
+  base_be = base_da - monto_da
+  monto_be = round(base_be * 0.05, 2) if var_be == "SI" else 0.0
+
+  subtotal_con_desc = tasa_mensual - monto_bc - monto_da - monto_be
+
+  monto_edenor = (
+      float(entry_edenor.replace(".", "").replace(",", "."))
+      if entry_edenor
+      else 0.0
+  )
+
+  tasa_total = round(
+      subtotal_con_desc + tasa_proteccion + tasa_salud - monto_edenor, 2
+  )
+
+  if var_tope == "NO" and tasa_total < 4500.0:
+    tasa_total = 8900.0 if estado_sel == "BALDIO" else 4500.0
+
+
+  def fmt(val):
+    return (
+        f"${val:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+    )
+
+
+  bi_str = fmt(bi)
+  lim_str = fmt(lim_inf)
+  cfa_str = fmt(cfa_val)
+  tasa_anual_str = fmt(tasa_anual)
+  alic_str = f"{alic * 100:.2f}%"
+  tasa_mensual_str = fmt(tasa_mensual)
+  bc_str = f"-{fmt(monto_bc)}" if monto_bc > 0 else f"-{fmt(0.0)}"
+  da_str = f"-{fmt(monto_da)}" if monto_da > 0 else f"-{fmt(0.0)}"
+  be_str = f"-{fmt(monto_be)}" if monto_be > 0 else f"-{fmt(0.0)}"
+  edenor_str = f"-{fmt(monto_edenor)}" if monto_edenor > 0 else f"-{fmt(0.0)}"
+  tasa_prot_str = fmt(tasa_proteccion)
+  tasa_salud_str = fmt(tasa_salud)
+  tasa_total_str = fmt(tasa_total)
+
+  st.markdown("---")
+  st.markdown(
+      "<p style='font-family: Arial, sans-serif; font-size: 13px; font-weight:"
+      " bold; text-transform: uppercase; margin-bottom: 8px;'>BASE IMPONIBLE Y"
+      " COEFICIENTES</p>",
+      unsafe_allow_html=True,
+  )
+
+  c_bi, c_ca, c_cu, c_cb, c_cap = st.columns(5)
+  with c_bi:
+    st.markdown(
+        f'<div class="resultado-box"><span'
+        f' class="resultado-label">BI:</span><span'
+        f' class="resultado-valor">{bi_str}</span></div>',
+        unsafe_allow_html=True,
+    )
+  with c_ca:
+    st.markdown(
+        f'<div class="resultado-box"><span'
+        f' class="resultado-label">CA:</span><span'
+        f' class="resultado-valor">{ca}</span></div>',
+        unsafe_allow_html=True,
+    )
+  with c_cu:
+    st.markdown(
+        f'<div class="resultado-box"><span'
+        f' class="resultado-label">CU:</span><span'
+        f' class="resultado-valor">{cu}</span></div>',
+        unsafe_allow_html=True,
+    )
+  with c_cb:
+    st.markdown(
+        f'<div class="resultado-box"><span'
+        f' class="resultado-label">CB:</span><span'
+        f' class="resultado-valor">{cb}</span></div>',
+        unsafe_allow_html=True,
+    )
+  with c_cap:
+    st.markdown(
+        f'<div class="resultado-box"><span'
+        f' class="resultado-label">CAP:</span><span'
+        f' class="resultado-valor">{cap}</span></div>',
+        unsafe_allow_html=True,
+    )
+
+
+  def caja_horizontal(descripcion, valor_texto, columna_destino):
+    with columna_destino:
+      st.markdown(
+          f"""
+                <div class="resultado-box">
+                    <span class="resultado-label">{descripcion}</span>
+                    <span class="resultado-valor">{valor_texto}</span>
+                </div>
+                """,
+          unsafe_allow_html=True,
+      )
+
+
+  f1_c1, f1_c2, f1_c3 = st.columns(3)
+  caja_horizontal("Límite inferior:", lim_str, f1_c1)
+  caja_horizontal("Alícuota:", alic_str, f1_c2)
+  caja_horizontal("CFA:", cfa_str, f1_c3)
+
+  f2_c1, f2_c2, f2_c3 = st.columns(3)
+  caja_horizontal("TSG Anual:", tasa_anual_str, f2_c1)
+  caja_horizontal("TSG Mensual:", tasa_mensual_str, f2_c2)
+
+  f3_c1, f3_c2, f3_c3 = st.columns(3)
+  caja_horizontal("Tasa de Salud:", tasa_salud_str, f3_c1)
+  caja_horizontal("Tasa de Protección:", tasa_prot_str, f3_c2)
+  caja_horizontal("EDENOR:", edenor_str, f3_c3)
+
+  f4_c1, f4_c2, f4_c3 = st.columns(3)
+  caja_horizontal("BC:", bc_str, f4_c1)
+  caja_horizontal("DA:", da_str, f4_c2)
+  caja_horizontal("BE:", be_str, f4_c3)
+
+  # Cuadro para el TSG Total
+  st.markdown(
+      f"""
+        <div class="resultado-box" style="border: 2px solid #1e293b !important; margin-top: 6px; padding: 8px 12px;">
+            <span class="resultado-label" style="font-size: 13px; font-weight: bold;">TSG Total:</span>
+            <span class="resultado-valor" style="font-size: 13px; font-weight: bold;">{tasa_total_str}</span>
+        </div>
+        """,
+      unsafe_allow_html=True,
+  )
+
+  # --- CUADRO DE AJUSTES MODERNIZADO (Art. 15 Ord. Fiscal 7437/2024 TO 2025) ---
   st.markdown("<br>", unsafe_allow_html=True)
   st.markdown(
       "<p style='font-family: Arial, sans-serif; font-size: 13px; font-weight:"
@@ -24,7 +460,6 @@
 
   sub_c_acumulado = tasa_mensual
 
-  # Iniciamos la tabla HTML completa en una sola variable
   tabla_html = """
     <table class="tabla-moderna-cuotas">
         <thead>
@@ -72,7 +507,6 @@
     if var_tope == "NO" and total_cuota < 4500.0:
       total_cuota = 8900.0 if estado_sel == "BALDIO" else 4500.0
 
-    # Acumulamos cada fila
     tabla_html += f"""
         <tr>
             <td>{nombre_cuota}</td>
@@ -85,11 +519,25 @@
         </tr>
         """
 
-  # Cerramos la tabla
   tabla_html += """
         </tbody>
     </table>
     """
 
-  # Renderizamos todo de una sola vez
   st.markdown(tabla_html, unsafe_allow_html=True)
+  # ---------------------------------------------------------------------
+
+  # 4. Botón para imprimir reporte en A4
+  st.markdown("<br>", unsafe_allow_html=True)
+  if st.button("🖨️ IMPRIMIR REPORTE EN HOJA A4"):
+    st.markdown("""<script>window.print();</script>""", unsafe_allow_html=True)
+    st.success("Abriendo ventana de impresión...")
+
+  # --- IMAGEN DE PIE DE PÁGINA ---
+  ruta_pie = os.path.join(ruta_base, "pie_pagina.png")
+  if os.path.exists(ruta_pie):
+    st.markdown("<br>", unsafe_allow_html=True)
+    st.image(ruta_pie, use_container_width=True)
+
+except ValueError:
+  st.error("Revise que los campos numéricos sean válidos.")
