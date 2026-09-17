@@ -68,28 +68,46 @@ st.markdown(
             font-size: 13px !important;
         }
         
-        /* Estilo para tabla de cuotas */
-        .tabla-cuotas {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-            margin-bottom: 10px;
+        /* Estilo para contenedor de cuotas en formato tarjeta / globo */
+        .cuota-card {
+            background-color: #ffffff !important;
+            border: 1px solid #cbd5e1 !important;
+            border-radius: 6px;
+            padding: 8px 12px;
+            margin-bottom: 6px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+        }
+        .cuota-header {
+            font-weight: bold;
+            color: #0284c7 !important;
+            font-size: 13px !important;
+            border-bottom: 1px solid #f1f5f9;
+            padding-bottom: 4px;
+            margin-bottom: 6px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .cuota-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
             font-size: 12px !important;
         }
-        .tabla-cuotas th, .tabla-cuotas td {
-            border: 1px solid #cbd5e1;
-            padding: 5px 8px;
-            text-align: right;
-            font-family: Arial, sans-serif !important;
-            color: #1e293b !important;
+        .cuota-item {
+            display: flex;
+            justify-content: space-between;
+            background-color: #f8fafc;
+            padding: 4px 6px;
+            border-radius: 3px;
+            border: 1px solid #e2e8f0;
         }
-        .tabla-cuotas th {
-            background-color: #f1f5f9;
-            font-weight: bold;
-            text-align: center;
-        }
-        .tabla-cuotas td:first-child {
-            text-align: left;
+        .cuota-total-item {
+            display: flex;
+            justify-content: space-between;
+            background-color: #f0fdf4;
+            padding: 4px 6px;
+            border-radius: 3px;
+            border: 1px solid #bbf7d0;
             font-weight: bold;
         }
         
@@ -125,7 +143,7 @@ st.markdown(
                 padding-bottom: 0 !important;
                 max-width: 100% !important;
             }
-            .resultado-box, .tabla-cuotas th, .tabla-cuotas td {
+            .resultado-box, .cuota-card {
                 border: 1px solid #000000 !important;
                 page-break-inside: avoid !important;
             }
@@ -440,7 +458,6 @@ try:
       0.0,
   ]
 
-  filas_tabla = []
   sub_c_acumulado = tasa_mensual  # Arranca con el valor base de la cuota 1
 
   for i in range(1, 13):
@@ -451,7 +468,6 @@ try:
         else f"CUOTA {i}-2026 (0%)"
     )
 
-    # Si hay porcentaje de aumento, se acumula de forma compuesta sobre la cuota anterior
     if pct > 0:
       sub_c_acumulado = round(sub_c_acumulado * (1.0 + (pct / 100.0)), 2)
 
@@ -469,7 +485,6 @@ try:
     prot_c = round(sub_c * 0.095, 2)
     salud_c = round(sub_c * 0.105, 2)
 
-    # El descuento de Edenor toma el valor completo cargado por el usuario (sin dividir por 12)
     m_edenor_c = monto_edenor
 
     total_cuota = round(sub_desc_c + prot_c + salud_c - m_edenor_c, 2)
@@ -477,22 +492,29 @@ try:
     if var_tope == "NO" and total_cuota < 4500.0:
       total_cuota = 8900.0 if estado_sel == "BALDIO" else 4500.0
 
-    filas_tabla.append({
-        "2026": nombre_cuota,
-        "Subtotal": fmt(sub_c),
-        "Descuento BC": f"-{fmt(m_bc_c)}",
-        "Descuento DA": f"-{fmt(m_da_c)}",
-        "Descuento BE": f"-{fmt(m_be_c)}",
-        "Descuento Edenor": f"-{fmt(m_edenor_c)}",
-        "TOTAL": fmt(total_cuota),
-    })
-
-  df_cuotas = pd.DataFrame(filas_tabla)
-
-  st.markdown(
-      df_cuotas.to_html(index=False, escape=False, classes="tabla-cuotas"),
-      unsafe_allow_html=True,
-  )
+    # Generación de la tarjeta con estilo de globos/recuadros limpios
+    st.markdown(
+        f"""
+        <div class="cuota-card">
+            <div class="cuota-header">
+                <span>{nombre_cuota}</span>
+            </div>
+            <div class="cuota-grid">
+                <div class="cuota-item"><span style="color: #64748b;">Subtotal:</span> <b>{fmt(sub_c)}</b></div>
+                <div class="cuota-item"><span style="color: #64748b;">Desc. BC:</span> <b>-{fmt(m_bc_c)}</b></div>
+                <div class="cuota-item"><span style="color: #64748b;">Desc. DA:</span> <b>-{fmt(m_da_c)}</b></div>
+                <div class="cuota-item"><span style="color: #64748b;">Desc. BE:</span> <b>-{fmt(m_be_c)}</b></div>
+                <div class="cuota-item"><span style="color: #64748b;">Desc. Edenor:</span> <b>-{fmt(m_edenor_c)}</b></div>
+            </div>
+            <div style="margin-top: 6px; display: flex; justify-content: flex-end;">
+                <div class="cuota-total-item" style="width: 220px;">
+                    <span>TOTAL CUOTA:</span> <span>{fmt(total_cuota)}</span>
+                </div>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
   # ---------------------------------------------------------------------
 
   # 4. Botón para imprimir reporte en A4
