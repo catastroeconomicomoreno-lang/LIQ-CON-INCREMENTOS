@@ -39,56 +39,63 @@ st.markdown(
             gap: 8px !important;
         }
         
-        /* Tarjetas de resultados estilo prolijo */
+        /* Cajas de resultados y celdas de la tabla con el formato exacto superior */
         .resultado-box {
             background-color: #ffffff !important;
-            padding: 4px 6px;
-            border-radius: 4px;
+            padding: 5px 10px !important;
+            border-radius: 4px !important;
             border: 1px solid #cbd5e1 !important;
-            margin-bottom: 3px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.04);
-            text-align: center;
-            min-height: 26px;
+            margin-bottom: 3px !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.04) !important;
+            text-align: center !important;
+            min-height: 28px !important;
         }
         
+        /* Cabeceras de la tabla con el mismo estilo limpio y tipografía */
         .tabla-header {
-            background-color: #e2e8f0 !important;
-            color: #0f172a !important;
+            background-color: #ffffff !important;
+            color: #1e293b !important;
             font-weight: bold;
             text-align: center;
-            padding: 6px 4px;
-            border: 1px solid #94a3b8 !important;
-            border-radius: 4px;
-            font-size: 11px !important;
+            padding: 5px 10px !important;
+            border: 1px solid #cbd5e1 !important;
+            border-radius: 4px !important;
+            font-size: 12px !important;
             text-transform: uppercase;
+            min-height: 28px !important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.04);
         }
         
         .titulo-seccion-tabla {
-            background-color: #f8fafc;
-            border: 1px solid #94a3b8;
-            padding: 5px 10px;
+            background-color: #ffffff;
+            border: 1px solid #cbd5e1;
+            padding: 6px 10px;
             font-weight: bold;
             text-align: center;
             margin-bottom: 4px;
             border-radius: 4px;
             font-size: 12px !important;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.04);
         }
         
         .resultado-label {
             font-family: Arial, sans-serif !important;
             color: #1e293b !important;
             font-weight: bold;
-            font-size: 11px !important;
+            font-size: 12px !important;
         }
         
         .resultado-valor {
             font-family: Arial, sans-serif !important;
             color: #1e293b !important;
             font-weight: bold;
-            font-size: 11px !important;
+            font-size: 12px !important;
         }
         
         .stButton>button {
@@ -399,10 +406,9 @@ try:
       unsafe_allow_html=True,
   )
 
-  # --- TABLA DE CUOTAS EN COLUMNAS ALINEADAS ---
+  # --- TABLA DE CUOTAS CON FORMATO UNIFICADO ---
   st.markdown("<br>", unsafe_allow_html=True)
 
-  # Título superior de la sección
   st.markdown(
       """
     <div class="titulo-seccion-tabla">
@@ -412,7 +418,6 @@ try:
       unsafe_allow_html=True,
   )
 
-  # Cabeceras de la tabla
   col_t1, col_t2, col_t3, col_t4, col_t5, col_t6, col_t7 = st.columns(
       [1.5, 1, 1, 1, 1, 1, 1]
   )
@@ -489,7 +494,6 @@ try:
     if var_tope == "NO" and total_cuota < 4500.0:
       total_cuota = 8900.0 if estado_sel == "BALDIO" else 4500.0
 
-    # Fila de columnas para cada cuota
     r_c1, r_c2, r_c3, r_c4, r_c5, r_c6, r_c7 = st.columns(
         [1.5, 1, 1, 1, 1, 1, 1]
     )
@@ -548,8 +552,7 @@ try:
       )
     with r_c7:
       st.markdown(
-          f'<div class="resultado-box" style="background-color: #f8fafc;'
-          f'"><span class="resultado-valor"'
+          f'<div class="resultado-box"><span class="resultado-valor"'
           f' style="color:#0284c7;">{fmt(total_cuota)}</span></div>',
           unsafe_allow_html=True,
       )
