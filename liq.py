@@ -13,7 +13,6 @@ ruta_encabezado = os.path.join(ruta_base, "encabezado.png")
 if os.path.exists(ruta_encabezado):
   st.image(ruta_encabezado, use_container_width=True)
 
-# Estilos CSS con el formato de tarjetas prolijas de la primera parte
 st.markdown(
     """
     <style>
@@ -40,17 +39,31 @@ st.markdown(
             gap: 8px !important;
         }
         
-        /* Tarjetas de resultados estilo prolijo (primera parte) */
+        /* Tarjetas de resultados estilo prolijo */
         .resultado-box {
             background-color: #ffffff !important;
-            padding: 5px 10px;
+            padding: 6px 10px;
             border-radius: 4px;
             border: 1px solid #cbd5e1 !important;
-            margin-bottom: 3px;
+            margin-bottom: 4px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+        }
+        
+        /* Tarjeta específica para el encabezado de la sección */
+        .header-cuotas-box {
+            background-color: #f1f5f9 !important;
+            padding: 8px 10px;
+            border-radius: 4px;
+            border: 1px solid #94a3b8 !important;
+            margin-bottom: 6px;
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
         }
         
         .resultado-label {
@@ -99,7 +112,7 @@ st.markdown(
                 padding-bottom: 0 !important;
                 max-width: 100% !important;
             }
-            .resultado-box {
+            .resultado-box, .header-cuotas-box {
                 border: 1px solid #cbd5e1 !important;
                 page-break-inside: avoid !important;
             }
@@ -375,12 +388,17 @@ try:
       unsafe_allow_html=True,
   )
 
-  # --- SECCIÓN DE CUOTAS CON EL MISMO FORMATO DE TARJETAS (Cajas Prolijas) ---
+  # --- SECCIÓN DE CUOTAS CON TARJETA DE TÍTULO ARRIBA Y TARJETAS HORIZONTALES ---
   st.markdown("<br>", unsafe_allow_html=True)
+
+  # Tarjeta de cabecera para los títulos y columnas informativas
   st.markdown(
-      "<p style='font-family: Arial, sans-serif; font-size: 12px; font-weight:"
-      " bold; text-align: center; text-transform: uppercase; margin-bottom:"
-      " 6px;'>2026 - Aplicación Art. 15° Ord. Fiscal 7437/2024 TO 2025</p>",
+      """
+    <div class="header-cuotas-box">
+        <span>2026 - APLICACIÓN ART. 15° ORD. FISCAL 7437/2024 TO 2025</span>
+        <span style="color: #475569; font-weight: normal;">Detalle de Subtotal, Descuentos y Total</span>
+    </div>
+    """,
       unsafe_allow_html=True,
   )
 
@@ -431,13 +449,13 @@ try:
     if var_tope == "NO" and total_cuota < 4500.0:
       total_cuota = 8900.0 if estado_sel == "BALDIO" else 4500.0
 
-    # Renderizamos cada cuota con el formato exacto de tarjeta individual (resultado-box)
+    # Cada cuota en su tarjeta horizontal propia, limpia y bien distribuida
     st.markdown(
         f"""
-        <div class="resultado-box" style="padding: 4px 10px;">
+        <div class="resultado-box">
             <span class="resultado-label">{nombre_cuota}</span>
-            <span style="font-size: 11px; color: #475569;">Sub: {fmt(sub_c)} | Desc: -{fmt(m_bc_c)} / -{fmt(m_da_c)} / -{fmt(m_be_c)}</span>
-            <span class="resultado-valor" style="color: #0284c7;">{fmt(total_cuota)}</span>
+            <span style="color: #475569; font-size: 11px;">Sub: {fmt(sub_c)} &nbsp;|&nbsp; Desc: -{fmt(m_bc_c)} / -{fmt(m_da_c)} / -{fmt(m_be_c)}</span>
+            <span class="resultado-valor" style="color: #0284c7; font-size: 13px;">{fmt(total_cuota)}</span>
         </div>
         """,
         unsafe_allow_html=True,
