@@ -252,12 +252,17 @@ try:
     tasa_proteccion = round(tasa_mensual * 0.095, 2)  
     tasa_salud = round(tasa_mensual * 0.105, 2)         
     
+    # --- CÁLCULO DE DESCUENTOS EN CASCADA (RESUMEN) ---
     monto_bc = round(tasa_mensual * 0.10, 2) if var_bc == "SI" else 0.0
-    monto_da = round(tasa_mensual * 0.10, 2) if var_da == "SI" else 0.0
-    monto_be = round(tasa_mensual * 0.05, 2) if var_be == "SI" else 0.0
+    base_da = tasa_mensual - monto_bc
+    monto_da = round(base_da * 0.10, 2) if var_da == "SI" else 0.0
+    base_be = base_da - monto_da
+    monto_be = round(base_be * 0.05, 2) if var_be == "SI" else 0.0
+    
     monto_edenor = float(entry_edenor.replace(".", "").replace(",", ".")) if entry_edenor else 0.0
     
-    tasa_total = round((tasa_mensual + tasa_proteccion + tasa_salud) - monto_bc - monto_da - monto_be - monto_edenor, 2)
+    subtotal_con_desc_main = tasa_mensual - monto_bc - monto_da - monto_be
+    tasa_total = round(subtotal_con_desc_main - monto_edenor, 2)
     
     if var_tope == "NO" and tasa_total < 4500.0:
         tasa_total = 8900.0 if estado_sel == "BALDIO" else 4500.0
@@ -344,8 +349,6 @@ try:
     
     filas_tabla = []
     base_subtotal = tasa_mensual
-    base_prot = tasa_proteccion
-    base_salud = tasa_salud
     
     for i in range(1, 13):
         pct = porcentajes_aumento[i-1]
@@ -353,23 +356,25 @@ try:
         
         factor_ajuste = 1.0 + (pct / 100.0)
         sub_c = round(base_subtotal * factor_ajuste, 2)
-        prot_c = round(base_prot * factor_ajuste, 2)
-        salud_c = round(base_salud * factor_ajuste, 2)
         
-        subtotal_linea = sub_c + prot_c + salud_c
-        
+        # Descuentos en cascada para cada cuota
         m_bc_c = round(sub_c * 0.10, 2) if var_bc == "SI" else 0.0
-        m_da_c = round(sub_c * 0.10, 2) if var_da == "SI" else 0.0
-        m_be_c = round(sub_c * 0.05, 2) if var_be == "SI" else 0.0
+        base_da_c = sub_c - m_bc_c
+        m_da_c = round(base_da_c * 0.10, 2) if var_da == "SI" else 0.0
+        base_be_c = base_da_c - m_da_c
+        m_be_c = round(base_be_c * 0.05, 2) if var_be == "SI" else 0.0
+        
         m_edenor_c = round(monto_edenor / 12, 2) if monto_edenor > 0 else 0.0
         
-        total_cuota = round(subtotal_linea - m_bc_c - m_da_c - m_be_c - m_edenor_c, 2)
+        subtotal_con_desc_c = sub_c - m_bc_c - m_da_c - m_be_c
+        total_cuota = round(subtotal_con_desc_c - m_edenor_c, 2)
+        
         if var_tope == "NO" and total_cuota < 4500.0:
             total_cuota = 8900.0 if estado_sel == "BALDIO" else 4500.0
 
         filas_tabla.append({
             "2026": nombre_cuota,
-            "Subtotal": fmt(subtotal_linea),
+            "Subtotal": fmt(sub_c),
             "Descuento BC": f"-{fmt(m_bc_c)}",
             "Descuento DA": f"-{fmt(m_da_c)}",
             "Descuento BE": f"-{fmt(m_be_c)}",
