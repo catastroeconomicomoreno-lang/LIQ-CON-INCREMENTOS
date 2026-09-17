@@ -405,7 +405,7 @@ try:
       unsafe_allow_html=True,
   )
 
-  # --- TABLA DE CUOTAS CON PRIMERA COLUMNA ANGOSTA Y TEXTO FINO ---
+  # --- TABLA DE CUOTAS CON "CUOTA X" COMPLETO ---
   st.markdown("<br>", unsafe_allow_html=True)
 
   st.markdown(
@@ -417,9 +417,8 @@ try:
       unsafe_allow_html=True,
   )
 
-  # Primera columna achicada (proporción 0.9 en vez de 1.5)
   col_t1, col_t2, col_t3, col_t4, col_t5, col_t6, col_t7 = st.columns(
-      [0.9, 1, 1, 1, 1, 1, 1]
+      [1.1, 1, 1, 1, 1, 1, 1]
   )
   with col_t1:
     st.markdown('<div class="tabla-header">CUOTAS</div>', unsafe_allow_html=True)
@@ -465,10 +464,11 @@ try:
 
   for i in range(1, 13):
     pct = porcentajes_aumento[i - 1]
+    # Se utiliza "Cuota X (pct%)" de forma completa
     nombre_cuota = (
-        f"C.{i} ({pct}%)".replace(".0%", "%")
+        f"CUOTA {i} ({pct}%)".replace(".0%", "%")
         if pct > 0
-        else f"C.{i} (0%)"
+        else f"CUOTA {i} (0%)"
     )
 
     if pct > 0:
@@ -495,7 +495,7 @@ try:
       total_cuota = 8900.0 if estado_sel == "BALDIO" else 4500.0
 
     r_c1, r_c2, r_c3, r_c4, r_c5, r_c6, r_c7 = st.columns(
-        [0.9, 1, 1, 1, 1, 1, 1]
+        [1.1, 1, 1, 1, 1, 1, 1]
     )
 
     with r_c1:
