@@ -54,12 +54,27 @@ st.markdown(
             min-height: 28px !important;
         }
         
+        /* Caja específica para la tabla alineada a la izquierda */
+        .resultado-box-tabla {
+            background-color: #ffffff !important;
+            padding: 5px 8px !important;
+            border-radius: 4px !important;
+            border: 1px solid #cbd5e1 !important;
+            margin-bottom: 3px !important;
+            display: flex !important;
+            justify-content: flex-start !important;
+            align-items: center !important;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.04) !important;
+            text-align: left !important;
+            min-height: 28px !important;
+        }
+        
         .tabla-header {
             background-color: #ffffff !important;
             color: #1e293b !important;
             font-weight: normal;
-            text-align: center;
-            padding: 5px 6px !important;
+            text-align: left;
+            padding: 5px 8px !important;
             border: 1px solid #cbd5e1 !important;
             border-radius: 4px !important;
             font-size: 11px !important;
@@ -67,7 +82,7 @@ st.markdown(
             min-height: 28px !important;
             display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
             box-shadow: 0 1px 2px rgba(0,0,0,0.04);
         }
         
@@ -129,7 +144,7 @@ st.markdown(
                 padding-bottom: 0 !important;
                 max-width: 100% !important;
             }
-            .resultado-box, .tabla-header, .titulo-seccion-tabla {
+            .resultado-box, .resultado-box-tabla, .tabla-header, .titulo-seccion-tabla {
                 border: 1px solid #cbd5e1 !important;
                 page-break-inside: avoid !important;
             }
@@ -405,7 +420,7 @@ try:
       unsafe_allow_html=True,
   )
 
-  # --- TABLA DE CUOTAS CON "CUOTA X" COMPLETO ---
+  # --- TABLA DE CUOTAS ALINEADA A LA IZQUIERDA ---
   st.markdown("<br>", unsafe_allow_html=True)
 
   st.markdown(
@@ -418,7 +433,7 @@ try:
   )
 
   col_t1, col_t2, col_t3, col_t4, col_t5, col_t6, col_t7 = st.columns(
-      [1.1, 1, 1, 1, 1, 1, 1]
+      [1.3, 1, 1, 1, 1, 1, 1]
   )
   with col_t1:
     st.markdown('<div class="tabla-header">CUOTAS</div>', unsafe_allow_html=True)
@@ -464,7 +479,6 @@ try:
 
   for i in range(1, 13):
     pct = porcentajes_aumento[i - 1]
-    # Se utiliza "Cuota X (pct%)" de forma completa
     nombre_cuota = (
         f"CUOTA {i} ({pct}%)".replace(".0%", "%")
         if pct > 0
@@ -495,64 +509,64 @@ try:
       total_cuota = 8900.0 if estado_sel == "BALDIO" else 4500.0
 
     r_c1, r_c2, r_c3, r_c4, r_c5, r_c6, r_c7 = st.columns(
-        [1.1, 1, 1, 1, 1, 1, 1]
+        [1.3, 1, 1, 1, 1, 1, 1]
     )
 
     with r_c1:
       st.markdown(
-          f'<div class="resultado-box"><span'
+          f'<div class="resultado-box-tabla"><span'
           f' class="resultado-label">{nombre_cuota}</span></div>',
           unsafe_allow_html=True,
       )
     with r_c2:
       st.markdown(
-          f'<div class="resultado-box"><span'
+          f'<div class="resultado-box-tabla"><span'
           f' class="resultado-valor">{fmt(sub_c)}</span></div>',
           unsafe_allow_html=True,
       )
     with r_c3:
       st.markdown(
-          f'<div class="resultado-box"><span'
+          f'<div class="resultado-box-tabla"><span'
           f' class="resultado-valor">-</span><span'
           f' class="resultado-valor">{fmt(m_bc_c)}</span></div>'
           if m_bc_c > 0
-          else '<div class="resultado-box"><span'
+          else '<div class="resultado-box-tabla"><span'
           ' class="resultado-valor">-</span></div>',
           unsafe_allow_html=True,
       )
     with r_c4:
       st.markdown(
-          f'<div class="resultado-box"><span'
+          f'<div class="resultado-box-tabla"><span'
           f' class="resultado-valor">-</span><span'
           f' class="resultado-valor">{fmt(m_da_c)}</span></div>'
           if m_da_c > 0
-          else '<div class="resultado-box"><span'
+          else '<div class="resultado-box-tabla"><span'
           ' class="resultado-valor">-</span></div>',
           unsafe_allow_html=True,
       )
     with r_c5:
       st.markdown(
-          f'<div class="resultado-box"><span'
+          f'<div class="resultado-box-tabla"><span'
           f' class="resultado-valor">-</span><span'
           f' class="resultado-valor">{fmt(m_be_c)}</span></div>'
           if m_be_c > 0
-          else '<div class="resultado-box"><span'
+          else '<div class="resultado-box-tabla"><span'
           ' class="resultado-valor">-</span></div>',
           unsafe_allow_html=True,
       )
     with r_c6:
       st.markdown(
-          f'<div class="resultado-box"><span'
+          f'<div class="resultado-box-tabla"><span'
           f' class="resultado-valor">-</span><span'
           f' class="resultado-valor">{fmt(m_edenor_c)}</span></div>'
           if m_edenor_c > 0
-          else '<div class="resultado-box"><span'
+          else '<div class="resultado-box-tabla"><span'
           ' class="resultado-valor">-</span></div>',
           unsafe_allow_html=True,
       )
     with r_c7:
       st.markdown(
-          f'<div class="resultado-box"><span class="resultado-valor"'
+          f'<div class="resultado-box-tabla"><span class="resultado-valor"'
           f' style="color:#0284c7;">{fmt(total_cuota)}</span></div>',
           unsafe_allow_html=True,
       )
