@@ -190,9 +190,12 @@ with col_desc4:
 
 st.markdown("---")
 
+# Ubicados al lado: Liberar Tope y Prototípico
 col_tope1, col_tope2, col_tope3 = st.columns(3)
 with col_tope1:
   var_tope = st.radio("Liberar Tope:", ["NO", "SI"])
+with col_tope2:
+  var_prototipico = st.radio("Valuación Prototípica:", ["NO", "SI"])
 
 st.markdown("---")
 
@@ -209,7 +212,6 @@ with col_val2:
   )
 
 try:
-  va = float(entry_va.replace(".", "").replace(",", ".")) if entry_va else 0.0
   sup_terreno = (
       float(entry_sup_terreno.replace(".", "").replace(",", "."))
       if entry_sup_terreno
@@ -220,6 +222,23 @@ try:
       if entry_sup_edificada
       else 0.0
   )
+
+  # Cálculo de Valuación Prototípica según las reglas indicadas
+  if sup_terreno <= 10000:
+    val_terreno_proto = sup_terreno * 5 * 1261.39
+  else:
+    val_terreno_proto = sup_terreno * 10 * 1261.39
+
+  val_edificado_proto = sup_edificada * 50 * 1261.39
+  valuacion_prototipica_calc = round(val_terreno_proto + val_edificado_proto, 2)
+
+  # Si el usuario selecciona Prototípico SÍ, se inserta automáticamente en la valuación
+  if var_prototipico == "SI":
+    va = valuacion_prototipica_calc
+  else:
+    va = (
+        float(entry_va.replace(".", "").replace(",", ".")) if entry_va else 0.0
+    )
 
   estado_sel = var_estado
   uso_sel = var_uso
