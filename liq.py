@@ -1,4 +1,5 @@
 import os
+import pandas as pd
 import streamlit as st
 
 st.set_page_config(
@@ -339,45 +340,24 @@ try:
     st.markdown("<br>", unsafe_allow_html=True)
     st.markdown("<p style='font-family: Arial, sans-serif; font-size: 13px; font-weight: bold; text-align: center; text-transform: uppercase; margin-bottom: 2px;'>2026 - Aplicación Art. 15° Ord. Fiscal 7437/2024 TO 2025</p>", unsafe_allow_html=True)
 
-    # Definimos los porcentajes de aumento según la imagen de referencia para cada cuota
     porcentajes_aumento = [0.0, 0.0, 0.0, 8.84, 0.0, 0.0, 8.32, 0.0, 0.0, 5.808, 0.0, 0.0]
     
-    # Generamos la tabla HTML con las 12 cuotas
-    html_tabla = """
-    <table class="tabla-cuotas">
-        <thead>
-            <tr>
-                <th style="width: 25%;">2026</th>
-                <th>Subtotal</th>
-                <th>Descuento BC</th>
-                <th>Descuento DA</th>
-                <th>Descuento BE</th>
-                <th>Descuento Edenor</th>
-                <th style="width: 12%;">TOTAL</th>
-            </tr>
-        </thead>
-        <tbody>
-    """
-    
-    # Base de cálculo inicial para aplicar los incrementos acumulados o directos de las cuotas
+    filas_tabla = []
     base_subtotal = tasa_mensual
     base_prot = tasa_proteccion
     base_salud = tasa_salud
     
     for i in range(1, 13):
         pct = porcentajes_aumento[i-1]
-        nombre_cuota = f"CUOTA {i}-2026 ({pct if pct > 0 else 0}%)".replace(".0%", "%") if pct > 0 else f"CUOTA {i}-2026 (0%)"
+        nombre_cuota = f"CUOTA {i}-2026 ({pct}%)".replace(".0%", "%") if pct > 0 else f"CUOTA {i}-2026 (0%)"
         
-        # Aplicación del porcentaje de ajuste de la cuota sobre los conceptos base
         factor_ajuste = 1.0 + (pct / 100.0)
         sub_c = round(base_subtotal * factor_ajuste, 2)
         prot_c = round(base_prot * factor_ajuste, 2)
         salud_c = round(base_salud * factor_ajuste, 2)
         
-        # Subtotal general de la línea (Subtotal + Salud + Protección)
         subtotal_linea = sub_c + prot_c + salud_c
         
-        # Descuentos proporcionales para la cuota
         m_bc_c = round(sub_c * 0.10, 2) if var_bc == "SI" else 0.0
         m_da_c = round(sub_c * 0.10, 2) if var_da == "SI" else 0.0
         m_be_c = round(sub_c * 0.05, 2) if var_be == "SI" else 0.0
@@ -387,24 +367,22 @@ try:
         if var_tope == "NO" and total_cuota < 4500.0:
             total_cuota = 8900.0 if estado_sel == "BALDIO" else 4500.0
 
-        html_tabla += f"""
-            <tr>
-                <td>{nombre_cuota}</td>
-                <td>{fmt(subtotal_linea)}</td>
-                <td>-{fmt(m_bc_c)}</td>
-                <td>-{fmt(m_da_c)}</td>
-                <td>-{fmt(m_be_c)}</td>
-                <td>-{fmt(m_edenor_c)}</td>
-                <td><b>{fmt(total_cuota)}</b></td>
-            </tr>
-        """
-        
-    html_tabla += """
-        </tbody>
-    </table>
-    """
+        filas_tabla.append({
+            "2026": nombre_cuota,
+            "Subtotal": fmt(subtotal_linea),
+            "Descuento BC": f"-{fmt(m_bc_c)}",
+            "Descuento DA": f"-{fmt(m_da_c)}",
+            "Descuento BE": f"-{fmt(m_be_c)}",
+            "Descuento Edenor": f"-{fmt(m_edenor_c)}",
+            "TOTAL": fmt(total_cuota)
+        })
+
+    df_cuotas = pd.DataFrame(filas_tabla)
     
-    st.markdown(html_tabla, unsafe_allow_html=True)
+    st.markdown(
+        df_cuotas.to_html(index=False, escape=False, classes="tabla-cuotas"),
+        unsafe_allow_html=True
+    )
     # ---------------------------------------------------------------------
 
     # 4. Botón para imprimir reporte en A4
