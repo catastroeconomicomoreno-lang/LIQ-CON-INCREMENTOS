@@ -13,7 +13,7 @@ ruta_encabezado = os.path.join(ruta_base, "encabezado.png")
 if os.path.exists(ruta_encabezado):
   st.image(ruta_encabezado, use_container_width=True)
 
-# Estilos CSS con tarjetas súper comprimidas y tipografía optimizada para A4
+# Estilos CSS optimizados para una vista ultra comprimida tipo planilla
 st.markdown(
     """
     <style>
@@ -21,50 +21,58 @@ st.markdown(
         label, p, span, div, [data-testid="stWidgetLabel"] p, .stMarkdown p {
             font-family: Arial, sans-serif !important;
             color: #1e293b !important;
-            font-size: 12px !important;
+            font-size: 11px !important;
         }
         
         div[data-testid="stMarkdownContainer"] p, .stRadio label {
             font-family: Arial, sans-serif !important;
             color: #1e293b !important;
-            font-size: 12px !important;
+            font-size: 11px !important;
         }
         
         [data-testid="stWidgetLabel"] {
-            margin-bottom: 1px !important;
+            margin-bottom: 0px !important;
             padding-bottom: 0px !important;
         }
         
         div.row-widget.stRadio > div {
             flex-direction: row !important;
-            gap: 8px !important;
+            gap: 6px !important;
         }
         
-        /* Tarjetas de resultados ultracompactas */
-        .resultado-box-mini {
-            background-color: #ffffff !important;
-            padding: 3px 6px;
-            border-radius: 3px;
-            border: 1px solid #cbd5e1 !important;
-            margin-bottom: 2px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 1px 1px rgba(0,0,0,0.02);
+        /* Tabla de resumen compacto estilo HTML */
+        .tabla-resumen {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 4px;
+            margin-bottom: 4px;
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
         }
-        
-        .resultado-label-mini {
-            font-family: Arial, sans-serif !important;
-            color: #475569 !important;
+        .tabla-resumen th {
+            background-color: #f1f5f9;
+            color: #334155;
+            font-size: 11px;
             font-weight: bold;
-            font-size: 11px !important;
+            text-align: center;
+            padding: 4px;
+            border: 1px solid #cbd5e1;
         }
-        
-        .resultado-valor-mini {
-            font-family: Arial, sans-serif !important;
-            color: #0f172a !important;
+        .tabla-resumen td {
+            font-size: 11px;
+            padding: 4px 6px;
+            border: 1px solid #cbd5e1;
+            color: #0f172a;
+        }
+        .td-label {
             font-weight: bold;
-            font-size: 11px !important;
+            color: #475569;
+            background-color: #f8fafc;
+            width: 20%;
+        }
+        .td-val {
+            text-align: right;
+            width: 30%;
         }
         
         .stButton>button {
@@ -73,9 +81,9 @@ st.markdown(
             font-weight: bold !important;
             border-radius: 4px !important;
             border: none !important;
-            padding: 6px 12px !important;
+            padding: 4px 10px !important;
             width: 100% !important;
-            font-size: 12px !important;
+            font-size: 11px !important;
         }
 
         @media print {
@@ -99,23 +107,16 @@ st.markdown(
                 padding-bottom: 0 !important;
                 max-width: 100% !important;
             }
-            .resultado-box-mini {
-                border: 1px solid #cbd5e1 !important;
-                page-break-inside: avoid !important;
-            }
         }
     </style>
     """,
     unsafe_allow_html=True,
 )
 
-st.markdown("<br>", unsafe_allow_html=True)
-
-col_p1, col_p2, col_p3 = st.columns(3)
+# Filtros de entrada compactos en filas más juntas
+col_p1, col_p2, col_p3 = st.columns([1, 2, 1])
 with col_p2:
   entry_partida = st.text_input("PARTIDA MUNICIPAL N°:")
-
-st.markdown("---")
 
 col_f1_1, col_f1_2, col_f1_3, col_f1_4 = st.columns(4)
 with col_f1_1:
@@ -127,10 +128,8 @@ with col_f1_3:
 with col_f1_4:
   var_zonif = st.selectbox("Zonificación:", ["A/B", "F", "OTRA"])
 
-st.markdown("---")
-
 st.markdown(
-    "<p style='font-weight: bold; margin-bottom: 2px;'>DESCUENTOS:</p>",
+    "<p style='font-weight: bold; margin: 2px 0 0 0;'>DESCUENTOS:</p>",
     unsafe_allow_html=True,
 )
 col_desc1, col_desc2, col_desc3, col_desc4 = st.columns(4)
@@ -145,13 +144,9 @@ with col_desc3:
 with col_desc4:
   entry_edenor = st.text_input("EDENOR ($):", "0,00")
 
-st.markdown("---")
-
-col_tope1, col_tope2, col_tope3 = st.columns(3)
+col_tope1, col_tope2, col_tope3 = st.columns([1, 1, 2])
 with col_tope1:
   var_tope = st.radio("Liberar Tope:", ["NO", "SI"])
-
-st.markdown("---")
 
 col_sup1, col_sup2, col_val1, col_val2 = st.columns(4)
 with col_sup1:
@@ -289,76 +284,52 @@ try:
   tasa_salud_str = fmt(tasa_salud)
   tasa_total_str = fmt(tasa_total)
 
-  st.markdown("---")
-  st.markdown(
-      "<p style='font-family: Arial, sans-serif; font-size: 12px; font-weight:"
-      " bold; text-transform: uppercase; margin-bottom: 4px;'>BASE IMPONIBLE Y"
-      " COEFICIENTES</p>",
-      unsafe_allow_html=True,
-  )
-
-  # Layout ultracomprimido en 4 columnas para ocupar mucho menos espacio vertical
-  c1, c2, c3, c4 = st.columns(4)
-
-
-  def caja_mini(descripcion, valor_texto, columna):
-    with columna:
-      st.markdown(
-          f"""
-                <div class="resultado-box-mini">
-                    <span class="resultado-label-mini">{descripcion}</span>
-                    <span class="resultado-valor-mini">{valor_texto}</span>
-                </div>
-                """,
-          unsafe_allow_html=True,
-      )
-
-
-  # Columna 1: Coeficientes base
-  caja_mini("BI:", bi_str, c1)
-  caja_mini("CA:", str(ca), c1)
-  caja_mini("CU:", str(cu), c1)
-
-  # Columna 2: Coeficientes y Alícuota
-  caja_mini("CB:", str(cb), c2)
-  caja_mini("CAP:", str(cap), c2)
-  caja_mini("Alícuota:", alic_str, c2)
-
-  # Columna 3: Montos base y Tasas adicionales
-  caja_mini("Límite inf:", lim_str, c3)
-  caja_mini("CFA:", cfa_str, c3)
-  caja_mini("TSG Anual:", tasa_anual_str, c3)
-
-  # Columna 4: Mensual, Salud, Protección y Descuentos agrupados
-  caja_mini("TSG Mens:", tasa_mensual_str, c4)
-  caja_mini("Salud:", tasa_salud_str, c4)
-  caja_mini("Protección:", tasa_prot_str, c4)
-
-  # Fila inferior compacta para Descuentos / Edenor y el Total general destacado
-  d1, d2, d3, d4, d5 = st.columns(5)
-  caja_mini("BC:", bc_str, d1)
-  caja_mini("DA:", da_str, d2)
-  caja_mini("BE:", be_str, d3)
-  caja_mini("Edenor:", edenor_str, d4)
-  caja_mini("TSG Total:", tasa_total_str, d5)
-
-  # Cuadro Totalizador principal resaltado pero compacto
+  # --- PLANILLA RESUMEN COMPACTA (UNIFICADA) ---
   st.markdown(
       f"""
-        <div class="resultado-box-mini" style="border: 2px solid #0284c7 !important; margin-top: 4px; padding: 6px 10px; background-color: #f0f9ff !important;">
-            <span class="resultado-label-mini" style="font-size: 13px; font-weight: bold; color: #0369a1;">MONTO FINAL TSG TOTAL:</span>
-            <span class="resultado-valor-mini" style="font-size: 13px; font-weight: bold; color: #0369a1;">{tasa_total_str}</span>
-        </div>
-        """,
+    <table class="tabla-resumen">
+        <tr>
+            <td class="td-label">Base Imponible (BI):</td>
+            <td class="td-val">{bi_str}</td>
+            <td class="td-label">Límite Inferior:</td>
+            <td class="td-val">{lim_str}</td>
+            <td class="td-label">TSG Mensual:</td>
+            <td class="td-val">{tasa_mensual_str}</td>
+        </tr>
+        <tr>
+            <td class="td-label">Coeficientes (CA / CU):</td>
+            <td class="td-val">{ca} / {cu}</td>
+            <td class="td-label">CFA:</td>
+            <td class="td-val">{cfa_str}</td>
+            <td class="td-label">Tasa Protección (9.5%):</td>
+            <td class="td-val">{tasa_prot_str}</td>
+        </tr>
+        <tr>
+            <td class="td-label">Coeficientes (CB / CAP):</td>
+            <td class="td-val">{cb} / {cap}</td>
+            <td class="td-label">Alícuota:</td>
+            <td class="td-val">{alic_str}</td>
+            <td class="td-label">Tasa Salud (10.5%):</td>
+            <td class="td-val">{tasa_salud_str}</td>
+        </tr>
+        <tr>
+            <td class="td-label">Descuentos (BC / DA / BE):</td>
+            <td class="td-val" style="font-size:10px;">{bc_str} / {da_str} / {be_str}</td>
+            <td class="td-label">Edenor:</td>
+            <td class="td-val">{edenor_str}</td>
+            <td class="td-label" style="background-color: #e0f2fe; color: #0369a1; font-weight: bold;">MONTO FINAL TSG:</td>
+            <td class="td-val" style="background-color: #e0f2fe; color: #0369a1; font-weight: bold; font-size: 12px;">{tasa_total_str}</td>
+        </tr>
+    </table>
+    """,
       unsafe_allow_html=True,
   )
 
   # --- TABLA DE CUOTAS COMPRIMIDA (Con Pandas DataFrame) ---
-  st.markdown("<br>", unsafe_allow_html=True)
   st.markdown(
-      "<p style='font-family: Arial, sans-serif; font-size: 12px; font-weight:"
-      " bold; text-align: center; text-transform: uppercase; margin-bottom:"
-      " 2px;'>2026 - Aplicación Art. 15° Ord. Fiscal 7437/2024 TO 2025</p>",
+      "<p style='font-family: Arial, sans-serif; font-size: 11px; font-weight:"
+      " bold; text-align: center; text-transform: uppercase; margin: 6px 0 2px"
+      " 0;'>2026 - Aplicación Art. 15° Ord. Fiscal 7437/2024 TO 2025</p>",
       unsafe_allow_html=True,
   )
 
@@ -377,7 +348,6 @@ try:
       0.0,
   ]
   sub_c_acumulado = tasa_mensual
-
   filas_tabla = []
 
   for i in range(1, 13):
@@ -424,12 +394,13 @@ try:
   df_cuotas = pd.DataFrame(filas_tabla)
 
   st.dataframe(df_cuotas, use_container_width=True, hide_index=True)
-  # -----------------------------------------------------------------------------------------
 
   st.markdown("<br>", unsafe_allow_html=True)
-  if st.button("🖨️ IMPRIMIR REPORTE EN HOJA A4"):
-    st.markdown("""<script>window.print();</script>""", unsafe_allow_html=True)
-    st.success("Abriendo ventana de impresión...")
+  col_btn1, col_btn2, col_btn3 = st.columns([1, 2, 1])
+  with col_btn2:
+    if st.button("🖨️ IMPRIMIR REPORTE EN HOJA A4"):
+      st.markdown("""<script>window.print();</script>""", unsafe_allow_html=True)
+      st.success("Abriendo ventana de impresión...")
 
   ruta_pie = os.path.join(ruta_base, "pie_pagina.png")
   if os.path.exists(ruta_pie):
