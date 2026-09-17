@@ -44,10 +44,10 @@ st.markdown(
         
         .resultado-box {
             background-color: #ffffff !important;
-            padding: 6px 10px;
+            padding: 5px 8px;
             border-radius: 4px;
             border: 1px solid #cbd5e1 !important;
-            margin-bottom: 4px;
+            margin-bottom: 3px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -68,47 +68,48 @@ st.markdown(
             font-size: 13px !important;
         }
         
-        /* Estilo para contenedor de cuotas en formato tarjeta / globo */
-        .cuota-card {
-            background-color: #ffffff !important;
-            border: 1px solid #cbd5e1 !important;
+        /* Estilo moderno y compacto para la tabla de cuotas en A4 */
+        .tabla-moderna-cuotas {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 6px;
+            margin-bottom: 6px;
+            font-size: 12px !important;
+            background-color: #ffffff;
             border-radius: 6px;
-            padding: 8px 12px;
-            margin-bottom: 6px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
-        .cuota-header {
+        .tabla-moderna-cuotas th {
+            background-color: #f8fafc;
+            color: #0f172a !important;
             font-weight: bold;
-            color: #0284c7 !important;
-            font-size: 13px !important;
-            border-bottom: 1px solid #f1f5f9;
-            padding-bottom: 4px;
-            margin-bottom: 6px;
-            display: flex;
-            justify-content: space-between;
+            text-align: center;
+            padding: 6px 4px;
+            border-bottom: 2px solid #e2e8f0;
+            font-size: 11px !important;
+            text-transform: uppercase;
         }
-        .cuota-grid {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 8px;
+        .tabla-moderna-cuotas td {
+            padding: 5px 6px;
+            border-bottom: 1px solid #f1f5f9;
+            text-align: right;
+            font-family: Arial, sans-serif !important;
+            color: #1e293b !important;
             font-size: 12px !important;
         }
-        .cuota-item {
-            display: flex;
-            justify-content: space-between;
-            background-color: #f8fafc;
-            padding: 4px 6px;
-            border-radius: 3px;
-            border: 1px solid #e2e8f0;
+        .tabla-moderna-cuotas tr:last-child td {
+            border-bottom: none;
         }
-        .cuota-total-item {
-            display: flex;
-            justify-content: space-between;
-            background-color: #f0fdf4;
-            padding: 4px 6px;
-            border-radius: 3px;
-            border: 1px solid #bbf7d0;
+        .tabla-moderna-cuotas td:first-child {
+            text-align: left;
             font-weight: bold;
+            color: #0284c7 !important;
+        }
+        .td-total-cuota {
+            font-weight: bold;
+            background-color: #f8fafc;
+            color: #0f172a !important;
         }
         
         .stButton>button {
@@ -126,7 +127,7 @@ st.markdown(
             body, .stApp, [data-testid="stAppViewContainer"] {
                 background-color: #ffffff !important;
                 color: #000000 !important;
-                font-size: 10pt !important;
+                font-size: 9pt !important;
             }
             header, [data-testid="stSidebar"], [data-testid="stHeader"], .stDeployButton, [data-testid="stDecoration"] {
                 display: none !important;
@@ -143,8 +144,8 @@ st.markdown(
                 padding-bottom: 0 !important;
                 max-width: 100% !important;
             }
-            .resultado-box, .cuota-card {
-                border: 1px solid #000000 !important;
+            .resultado-box, .tabla-moderna-cuotas {
+                border: 1px solid #cbd5e1 !important;
                 page-break-inside: avoid !important;
             }
         }
@@ -316,7 +317,6 @@ try:
       else 0.0
   )
 
-  # Se suman las sobretasas (20% total) al subtotal con descuentos y se resta Edenor
   tasa_total = round(
       subtotal_con_desc + tasa_proteccion + tasa_salud - monto_edenor, 2
   )
@@ -426,7 +426,7 @@ try:
   # Cuadro para el TSG Total
   st.markdown(
       f"""
-        <div class="resultado-box" style="border: 2px solid #1e293b !important; margin-top: 10px; padding: 10px 14px;">
+        <div class="resultado-box" style="border: 2px solid #1e293b !important; margin-top: 6px; padding: 8px 12px;">
             <span class="resultado-label" style="font-size: 13px; font-weight: bold;">TSG Total:</span>
             <span class="resultado-valor" style="font-size: 13px; font-weight: bold;">{tasa_total_str}</span>
         </div>
@@ -434,7 +434,7 @@ try:
       unsafe_allow_html=True,
   )
 
-  # --- NUEVO CUADRO DE AJUSTES (Art. 15 Ord. Fiscal 7437/2024 TO 2025) ---
+  # --- CUADRO DE AJUSTES MODERNIZADO (Art. 15 Ord. Fiscal 7437/2024 TO 2025) ---
   st.markdown("<br>", unsafe_allow_html=True)
   st.markdown(
       "<p style='font-family: Arial, sans-serif; font-size: 13px; font-weight:"
@@ -458,7 +458,23 @@ try:
       0.0,
   ]
 
-  sub_c_acumulado = tasa_mensual  # Arranca con el valor base de la cuota 1
+  sub_c_acumulado = tasa_mensual
+
+  filas_html = """
+    <table class="tabla-moderna-cuotas">
+        <thead>
+            <tr>
+                <th style="text-align: left;">Cuota</th>
+                <th>Subtotal</th>
+                <th>Desc. BC</th>
+                <th>Desc. DA</th>
+                <th>Desc. BE</th>
+                <th>Desc. Edenor</th>
+                <th style="text-align: right;">Total Cuota</th>
+            </tr>
+        </thead>
+        <tbody>
+    """
 
   for i in range(1, 13):
     pct = porcentajes_aumento[i - 1]
@@ -473,7 +489,6 @@ try:
 
     sub_c = sub_c_acumulado
 
-    # Descuentos en cascada para cada cuota
     m_bc_c = round(sub_c * 0.10, 2) if var_bc == "SI" else 0.0
     base_da_c = sub_c - m_bc_c
     m_da_c = round(base_da_c * 0.10, 2) if var_da == "SI" else 0.0
@@ -492,29 +507,24 @@ try:
     if var_tope == "NO" and total_cuota < 4500.0:
       total_cuota = 8900.0 if estado_sel == "BALDIO" else 4500.0
 
-    # Generación de la tarjeta con estilo de globos/recuadros limpios
-    st.markdown(
-        f"""
-        <div class="cuota-card">
-            <div class="cuota-header">
-                <span>{nombre_cuota}</span>
-            </div>
-            <div class="cuota-grid">
-                <div class="cuota-item"><span style="color: #64748b;">Subtotal:</span> <b>{fmt(sub_c)}</b></div>
-                <div class="cuota-item"><span style="color: #64748b;">Desc. BC:</span> <b>-{fmt(m_bc_c)}</b></div>
-                <div class="cuota-item"><span style="color: #64748b;">Desc. DA:</span> <b>-{fmt(m_da_c)}</b></div>
-                <div class="cuota-item"><span style="color: #64748b;">Desc. BE:</span> <b>-{fmt(m_be_c)}</b></div>
-                <div class="cuota-item"><span style="color: #64748b;">Desc. Edenor:</span> <b>-{fmt(m_edenor_c)}</b></div>
-            </div>
-            <div style="margin-top: 6px; display: flex; justify-content: flex-end;">
-                <div class="cuota-total-item" style="width: 220px;">
-                    <span>TOTAL CUOTA:</span> <span>{fmt(total_cuota)}</span>
-                </div>
-            </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+    filas_html += f"""
+        <tr>
+            <td>{nombre_cuota}</td>
+            <td>{fmt(sub_c)}</td>
+            <td style="color: #64748b;">-{fmt(m_bc_c)}</td>
+            <td style="color: #64748b;">-{fmt(m_da_c)}</td>
+            <td style="color: #64748b;">-{fmt(m_be_c)}</td>
+            <td style="color: #64748b;">-{fmt(m_edenor_c)}</td>
+            <td class="td-total-cuota">{fmt(total_cuota)}</td>
+        </tr>
+        """
+
+  filas_html += """
+        </tbody>
+    </table>
+    """
+
+  st.markdown(filas_html, unsafe_allow_html=True)
   # ---------------------------------------------------------------------
 
   # 4. Botón para imprimir reporte en A4
