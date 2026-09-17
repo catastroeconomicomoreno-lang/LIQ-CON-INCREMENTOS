@@ -199,7 +199,6 @@ with col_tope2:
 
 st.markdown("---")
 
-# Captura previa de superficies para poder calcular el prototípico antes de definir la valuación
 col_sup1, col_sup2, col_val1, col_val2 = st.columns(4)
 with col_sup1:
   entry_sup_terreno = st.text_input("Superficie de Terreno (m²):", "300,00")
@@ -230,16 +229,18 @@ else:
 val_edificado_proto = sup_edificada_pre * 50 * 1261.39
 valuacion_prototipica_calc = round(val_terreno_proto + val_edificado_proto, 2)
 
-# Si es prototípico SÍ, el valor se autocompleta. Si es NO, queda editable por el usuario.
+valuacion_calc_str = f"{valuacion_prototipica_calc:,.2f}".replace(
+    ",", "X"
+).replace(".", ",").replace("X", ".")
+
+# Si es prototípico SÍ, inyectamos el valor calculado sin deshabilitar el input para conservar el color normal
 if var_prototipico == "SI":
-  default_val_str = f"{valuacion_prototipica_calc:,.2f}".replace(
-      ",", "X"
-  ).replace(".", ",").replace("X", ".")
-  with col_val1:
-    entry_va = st.text_input("Valuación ($):", value=default_val_str, disabled=True)
+  default_val_valuacion = valuacion_calc_str
 else:
-  with col_val1:
-    entry_va = st.text_input("Valuación ($):", value="300000,00")
+  default_val_valuacion = "300000,00"
+
+with col_val1:
+  entry_va = st.text_input("Valuación ($):", value=default_val_valuacion)
 
 with col_val2:
   var_anio = st.selectbox(
