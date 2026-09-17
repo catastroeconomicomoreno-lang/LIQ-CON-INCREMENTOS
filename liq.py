@@ -7,15 +7,12 @@ st.set_page_config(
     layout="wide",
 )
 
-# Detectar de forma segura la carpeta donde está corriendo tu app
 ruta_base = os.path.dirname(__file__)
 ruta_encabezado = os.path.join(ruta_base, "encabezado.png")
 
-# --- IMAGEN DE ENCABEZADO ---
 if os.path.exists(ruta_encabezado):
-    st.image(ruta_encabezado, use_container_width=True)
+  st.image(ruta_encabezado, use_container_width=True)
 
-# Estilos CSS estrictos: unifica fuente (Arial), tamaño (13px) y color (#1e293b) en toda la aplicación
 st.markdown(
     """
     <style>
@@ -68,50 +65,6 @@ st.markdown(
             font-size: 13px !important;
         }
         
-        /* Estilo moderno y compacto para la tabla de cuotas en A4 */
-        .tabla-moderna-cuotas {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 6px;
-            margin-bottom: 6px;
-            font-size: 12px !important;
-            background-color: #ffffff;
-            border-radius: 6px;
-            overflow: hidden;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-        }
-        .tabla-moderna-cuotas th {
-            background-color: #f8fafc;
-            color: #0f172a !important;
-            font-weight: bold;
-            text-align: center;
-            padding: 6px 4px;
-            border-bottom: 2px solid #e2e8f0;
-            font-size: 11px !important;
-            text-transform: uppercase;
-        }
-        .tabla-moderna-cuotas td {
-            padding: 5px 6px;
-            border-bottom: 1px solid #f1f5f9;
-            text-align: right;
-            font-family: Arial, sans-serif !important;
-            color: #1e293b !important;
-            font-size: 12px !important;
-        }
-        .tabla-moderna-cuotas tr:last-child td {
-            border-bottom: none;
-        }
-        .tabla-moderna-cuotas td:first-child {
-            text-align: left;
-            font-weight: bold;
-            color: #0284c7 !important;
-        }
-        .td-total-cuota {
-            font-weight: bold;
-            background-color: #f8fafc;
-            color: #0f172a !important;
-        }
-        
         .stButton>button {
             background-color: #0284c7 !important;
             color: white !important;
@@ -144,7 +97,7 @@ st.markdown(
                 padding-bottom: 0 !important;
                 max-width: 100% !important;
             }
-            .resultado-box, .tabla-moderna-cuotas {
+            .resultado-box {
                 border: 1px solid #cbd5e1 !important;
                 page-break-inside: avoid !important;
             }
@@ -156,70 +109,60 @@ st.markdown(
 
 st.markdown("<br>", unsafe_allow_html=True)
 
-# Partida municipal centrada
 col_p1, col_p2, col_p3 = st.columns(3)
 with col_p2:
-    entry_partida = st.text_input("PARTIDA MUNICIPAL N°:")
+  entry_partida = st.text_input("PARTIDA MUNICIPAL N°:")
 
 st.markdown("---")
 
-# Fila 1 de Controles
 col_f1_1, col_f1_2, col_f1_3, col_f1_4 = st.columns(4)
 with col_f1_1:
-    var_estado = st.radio("Estado:", ["EDIFICADO", "BALDIO"])
+  var_estado = st.radio("Estado:", ["EDIFICADO", "BALDIO"])
 with col_f1_2:
-    var_uso = st.radio("Uso:", ["RESIDENCIAL", "COMERCIAL", "INDUSTRIAL"])
+  var_uso = st.radio("Uso:", ["RESIDENCIAL", "COMERCIAL", "INDUSTRIAL"])
 with col_f1_3:
-    var_acceso = st.radio("Acceso Principal:", ["NO", "SI"])
+  var_acceso = st.radio("Acceso Principal:", ["NO", "SI"])
 with col_f1_4:
-    var_zonif = st.selectbox("Zonificación:", ["A/B", "F", "OTRA"])
+  var_zonif = st.selectbox("Zonificación:", ["A/B", "F", "OTRA"])
 
 st.markdown("---")
 
-# Fila de Descuentos
 st.markdown(
     "<p style='font-weight: bold; margin-bottom: 2px;'>DESCUENTOS:</p>",
     unsafe_allow_html=True,
 )
 col_desc1, col_desc2, col_desc3, col_desc4 = st.columns(4)
 with col_desc1:
-    var_bc = st.radio(
-        "Buen Contribuyente (BC 10%):", ["NO", "SI"], horizontal=True
-    )
+  var_bc = st.radio(
+      "Buen Contribuyente (BC 10%):", ["NO", "SI"], horizontal=True
+  )
 with col_desc2:
-    var_da = st.radio(
-        "Débito Automático (DA 10%):", ["NO", "SI"], horizontal=True
-    )
+  var_da = st.radio("Débito Automático (DA 10%):", ["NO", "SI"], horizontal=True)
 with col_desc3:
-    var_be = st.radio(
-        "Boleta Electrónica (BE 5%):", ["NO", "SI"], horizontal=True
-    )
+  var_be = st.radio("Boleta Electrónica (BE 5%):", ["NO", "SI"], horizontal=True)
 with col_desc4:
-    entry_edenor = st.text_input("EDENOR ($):", "0,00")
+  entry_edenor = st.text_input("EDENOR ($):", "0,00")
 
 st.markdown("---")
 
-# Fila abajo de todo para Liberar Tope
 col_tope1, col_tope2, col_tope3 = st.columns(3)
 with col_tope1:
-    var_tope = st.radio("Liberar Tope:", ["NO", "SI"])
+  var_tope = st.radio("Liberar Tope:", ["NO", "SI"])
 
 st.markdown("---")
 
-# Superficies y Valuaciones
 col_sup1, col_sup2, col_val1, col_val2 = st.columns(4)
 with col_sup1:
-    entry_sup_terreno = st.text_input("Superficie de Terreno (m²):", "300,00")
+  entry_sup_terreno = st.text_input("Superficie de Terreno (m²):", "300,00")
 with col_sup2:
-    entry_sup_edificada = st.text_input("Superficie Edificada (m²):", "0,00")
+  entry_sup_edificada = st.text_input("Superficie Edificada (m²):", "0,00")
 with col_val1:
-    entry_va = st.text_input("Valuación ($):", "300000,00")
+  entry_va = st.text_input("Valuación ($):", "300000,00")
 with col_val2:
-    var_anio = st.selectbox(
-        "Valuación año:", ["2023 o anterior", "2024", "2025", "2026"]
-    )
+  var_anio = st.selectbox(
+      "Valuación año:", ["2023 o anterior", "2024", "2025", "2026"]
+  )
 
-# Lógica de cálculo principal
 try:
   va = float(entry_va.replace(".", "").replace(",", ".")) if entry_va else 0.0
   sup_terreno = (
@@ -302,7 +245,6 @@ try:
   tasa_proteccion = round(tasa_mensual * 0.095, 2)
   tasa_salud = round(tasa_mensual * 0.105, 2)
 
-  # --- CÁLCULO DE DESCUENTOS EN CASCADA (RESUMEN) ---
   monto_bc = round(tasa_mensual * 0.10, 2) if var_bc == "SI" else 0.0
   base_da = tasa_mensual - monto_bc
   monto_da = round(base_da * 0.10, 2) if var_da == "SI" else 0.0
@@ -423,7 +365,6 @@ try:
   caja_horizontal("DA:", da_str, f4_c2)
   caja_horizontal("BE:", be_str, f4_c3)
 
-  # Cuadro para el TSG Total
   st.markdown(
       f"""
         <div class="resultado-box" style="border: 2px solid #1e293b !important; margin-top: 6px; padding: 8px 12px;">
@@ -434,7 +375,7 @@ try:
       unsafe_allow_html=True,
   )
 
-  # --- CUADRO DE AJUSTES MODERNIZADO (Art. 15 Ord. Fiscal 7437/2024 TO 2025) ---
+  # --- CUADRO DE AJUSTES CON DATAFRAME DE PANDAS (100% Robusto, sin errores de HTML) ---
   st.markdown("<br>", unsafe_allow_html=True)
   st.markdown(
       "<p style='font-family: Arial, sans-serif; font-size: 13px; font-weight:"
@@ -457,24 +398,9 @@ try:
       0.0,
       0.0,
   ]
-
   sub_c_acumulado = tasa_mensual
 
-  tabla_html = """
-    <table class="tabla-moderna-cuotas">
-        <thead>
-            <tr>
-                <th style="text-align: left;">Cuota</th>
-                <th>Subtotal</th>
-                <th>Desc. BC</th>
-                <th>Desc. DA</th>
-                <th>Desc. BE</th>
-                <th>Desc. Edenor</th>
-                <th style="text-align: right;">Total Cuota</th>
-            </tr>
-        </thead>
-        <tbody>
-    """
+  filas_tabla = []
 
   for i in range(1, 13):
     pct = porcentajes_aumento[i - 1]
@@ -507,33 +433,27 @@ try:
     if var_tope == "NO" and total_cuota < 4500.0:
       total_cuota = 8900.0 if estado_sel == "BALDIO" else 4500.0
 
-    tabla_html += f"""
-        <tr>
-            <td>{nombre_cuota}</td>
-            <td>{fmt(sub_c)}</td>
-            <td style="color: #64748b;">-{fmt(m_bc_c)}</td>
-            <td style="color: #64748b;">-{fmt(m_da_c)}</td>
-            <td style="color: #64748b;">-{fmt(m_be_c)}</td>
-            <td style="color: #64748b;">-{fmt(m_edenor_c)}</td>
-            <td class="td-total-cuota">{fmt(total_cuota)}</td>
-        </tr>
-        """
+    filas_tabla.append({
+        "Cuota": nombre_cuota,
+        "Subtotal": fmt(sub_c),
+        "Desc. BC": f"-{fmt(m_bc_c)}",
+        "Desc. DA": f"-{fmt(m_da_c)}",
+        "Desc. BE": f"-{fmt(m_be_c)}",
+        "Desc. Edenor": f"-{fmt(m_edenor_c)}",
+        "Total Cuota": fmt(total_cuota),
+    })
 
-  tabla_html += """
-        </tbody>
-    </table>
-    """
+  df_cuotas = pd.DataFrame(filas_tabla)
 
-  st.markdown(tabla_html, unsafe_allow_html=True)
-  # ---------------------------------------------------------------------
+  # Renderizamos con st.dataframe utilizando el ancho completo del contenedor (evita que falle el HTML)
+  st.dataframe(df_cuotas, use_container_width=True, hide_index=True)
+  # -----------------------------------------------------------------------------------------
 
-  # 4. Botón para imprimir reporte en A4
   st.markdown("<br>", unsafe_allow_html=True)
   if st.button("🖨️ IMPRIMIR REPORTE EN HOJA A4"):
     st.markdown("""<script>window.print();</script>""", unsafe_allow_html=True)
     st.success("Abriendo ventana de impresión...")
 
-  # --- IMAGEN DE PIE DE PÁGINA ---
   ruta_pie = os.path.join(ruta_base, "pie_pagina.png")
   if os.path.exists(ruta_pie):
     st.markdown("<br>", unsafe_allow_html=True)
