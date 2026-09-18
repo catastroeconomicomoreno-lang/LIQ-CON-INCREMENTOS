@@ -356,8 +356,8 @@ try:
         )
 
 
-    # --- LÓGICA DE VALOR CUOTA 2025: 10% MENOS QUE LA TASA MENSUAL ---
-    val_cuota_2025_auto = round(tasa_mensual * 0.90, 2)
+    # --- VALOR DE LA CUOTA DIVIDIDO 1.10 ---
+    val_cuota_2025_auto = round(tasa_total / 1.10, 2)
     val_cuota_2025_auto_str = f"{val_cuota_2025_auto:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
 
     with col_sub4:
