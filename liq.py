@@ -190,7 +190,7 @@ with col_desc3:
 with col_desc4:
     entry_edenor = st.text_input("EDENOR ($):", "0,00")
 
-# Fila 2 (Alineada exactamente debajo de la primera)
+# Fila 2 (Alineada exactamente debajo)
 col_sub1, col_sub2, col_sub3, col_sub4 = st.columns(4)
 with col_sub1:
     var_tope = st.radio("Liberar Tope:", ["NO", "SI"])
@@ -198,11 +198,6 @@ with col_sub2:
     var_prototipico = st.radio("Valuación Prototípica:", ["NO", "SI"])
 with col_sub3:
     var_liq2025 = st.radio("Última liquidación 2025:", ["NO", "SI"])
-with col_sub4:
-    if var_liq2025 == "SI":
-        entry_val_liq2025 = st.text_input("Valor Cuota 2025 ($):", "0,00")
-    else:
-        entry_val_liq2025 = "0,00"
 
 st.markdown("---")
 
@@ -212,7 +207,7 @@ with col_sup1:
 with col_sup2:
     entry_sup_edificada = st.text_input("Superficie Edificada (m²):", "0,00")
 
-# Cálculo preliminar de superficies para aplicar la fórmula prototípica
+# Cálculo preliminar de superficies
 try:
     sup_terreno_pre = (
         float(entry_sup_terreno.replace(".", "").replace(",", "."))
@@ -224,15 +219,9 @@ try:
         if entry_sup_edificada
         else 0.0
     )
-    val_liq2025_num = (
-        float(entry_val_liq2025.replace(".", "").replace(",", "."))
-        if entry_val_liq2025
-        else 0.0
-    )
 except ValueError:
     sup_terreno_pre = 0.0
     sup_edificada_pre = 0.0
-    val_liq2025_num = 0.0
 
 if sup_terreno_pre <= 10000:
     val_terreno_proto = sup_terreno_pre * 5 * 1261.39
@@ -365,6 +354,35 @@ try:
         return (
             f"${val:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
         )
+
+
+    # --- LÓGICA DEL CAMPO Y VALOR DE CUOTA 2025 ---
+    # Cálculo previo de la cuota 1 cuando la liquidación es NO
+    sub_desc_c1_std = tasa_mensual - monto_bc - monto_da - monto_be
+    prot_c1_std = round(tasa_mensual * 0.095, 2)
+    salud_c1_std = round(tasa_mensual * 0.105, 2)
+    total_cuota_1_std = round(sub_desc_c1_std + prot_c1_std + salud_c1_std - monto_edenor, 2)
+    if var_tope == "NO" and total_cuota_1_std < 4500.0:
+        total_cuota_1_std = 8900.0 if estado_sel == "BALDIO" else 4500.0
+
+    # Si es NO, se calcula automáticamente el 10% menos de la Cuota 1
+    val_cuota_2025_auto = round(total_cuota_1_std / 1.10, 2)
+    val_cuota_2025_auto_str = f"{val_cuota_2025_auto:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+
+    with col_sub4:
+        if var_liq2025 == "SI":
+            entry_val_liq2025 = st.text_input("Valor Cuota 2025 ($):", "0,00")
+        else:
+            entry_val_liq2025 = st.text_input("Valor Cuota 2025 ($):", value=val_cuota_2025_auto_str)
+
+    try:
+        val_liq2025_num = (
+            float(entry_val_liq2025.replace(".", "").replace(",", "."))
+            if entry_val_liq2025
+            else 0.0
+        )
+    except ValueError:
+        val_liq2025_num = 0.0
 
 
     bi_str = fmt(bi)
