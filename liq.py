@@ -357,7 +357,7 @@ try:
 
 
     # --- LÓGICA DEL CAMPO Y VALOR DE CUOTA 2025 ---
-    # Cálculo previo de la cuota 1 cuando la liquidación es NO
+    # Cálculo de la Cuota 1
     sub_desc_c1_std = tasa_mensual - monto_bc - monto_da - monto_be
     prot_c1_std = round(tasa_mensual * 0.095, 2)
     salud_c1_std = round(tasa_mensual * 0.105, 2)
@@ -365,8 +365,8 @@ try:
     if var_tope == "NO" and total_cuota_1_std < 4500.0:
         total_cuota_1_std = 8900.0 if estado_sel == "BALDIO" else 4500.0
 
-    # Si es NO, se calcula automáticamente el 10% menos de la Cuota 1
-    val_cuota_2025_auto = round(total_cuota_1_std / 1.10, 2)
+    # FÓRMULA CORREGIDA: Cuota 1 con 10% de descuento (Cuota 1 * 0.90)
+    val_cuota_2025_auto = round(total_cuota_1_std * 0.90, 2)
     val_cuota_2025_auto_str = f"{val_cuota_2025_auto:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
 
     with col_sub4:
