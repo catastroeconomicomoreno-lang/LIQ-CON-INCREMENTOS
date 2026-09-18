@@ -365,8 +365,8 @@ try:
     if var_tope == "NO" and total_cuota_1_std < 4500.0:
         total_cuota_1_std = 8900.0 if estado_sel == "BALDIO" else 4500.0
 
-    # FÓRMULA CORREGIDA: Cuota 1 con 10% de descuento (Cuota 1 * 0.90)
-    val_cuota_2025_auto = round(total_cuota_1_std * 0.90, 2)
+    # FÓRMULA SOLICITADA: Cuota 1 / 1.10
+    val_cuota_2025_auto = round(total_cuota_1_std / 1.10, 2)
     val_cuota_2025_auto_str = f"{val_cuota_2025_auto:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
 
     with col_sub4:
