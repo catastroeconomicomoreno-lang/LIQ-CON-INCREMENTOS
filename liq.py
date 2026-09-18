@@ -176,6 +176,8 @@ st.markdown(
     "<p style='font-weight: normal; margin-bottom: 2px;'>DESCUENTOS:</p>",
     unsafe_allow_html=True,
 )
+
+# Fila 1 de Descuentos
 col_desc1, col_desc2, col_desc3, col_desc4 = st.columns(4)
 with col_desc1:
     var_bc = st.radio(
@@ -188,16 +190,15 @@ with col_desc3:
 with col_desc4:
     entry_edenor = st.text_input("EDENOR ($):", "0,00")
 
-st.markdown("---")
-
-# Ubicación de Liberar Tope, Valuación Prototípica y Última Liquidación 2025 en 3 columnas
-col_tope1, col_tope2, col_tope3 = st.columns(3)
-with col_tope1:
+# Fila 2 (Alineada exactamente debajo de la primera)
+col_sub1, col_sub2, col_sub3, col_sub4 = st.columns(4)
+with col_sub1:
     var_tope = st.radio("Liberar Tope:", ["NO", "SI"])
-with col_tope2:
+with col_sub2:
     var_prototipico = st.radio("Valuación Prototípica:", ["NO", "SI"])
-with col_tope3:
+with col_sub3:
     var_liq2025 = st.radio("Última liquidación 2025:", ["NO", "SI"])
+with col_sub4:
     if var_liq2025 == "SI":
         entry_val_liq2025 = st.text_input("Valor Cuota 2025 ($):", "0,00")
     else:
@@ -524,7 +525,6 @@ try:
         0.0,
     ]
 
-    # Si se seleccionó la opción de liquidación 2025, la cuota 1 toma base del valor manual + 10%
     if var_liq2025 == "SI" and val_liq2025_num > 0:
         sub_c_acumulado = round(val_liq2025_num * 1.10, 2)
     else:
@@ -533,7 +533,6 @@ try:
     for i in range(1, 13):
         pct = porcentajes_aumento[i - 1]
         
-        # Etiqueta visual del porcentaje de incremento según si es la cuota 1 con liq 2025 o el resto
         if i == 1 and var_liq2025 == "SI":
             nombre_cuota = "CUOTA 1 (10%)"
         else:
@@ -543,7 +542,6 @@ try:
                 else f"CUOTA {i} (0%)"
             )
 
-        # Aplicar los incrementos a partir de la cuota 2
         if i > 1 and pct > 0:
             sub_c_acumulado = round(sub_c_acumulado * (1.0 + (pct / 100.0)), 2)
 
@@ -637,7 +635,6 @@ try:
                 f' style="color:#0284c7;">{fmt(total_cuota)}</span></div>',
                 unsafe_allow_html=True,
             )
-    # -------------------------------------------------------------------------
 
     st.markdown("<br>", unsafe_allow_html=True)
     if st.button("🖨️ IMPRIMIR REPORTE EN HOJA A4"):
