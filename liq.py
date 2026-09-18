@@ -190,12 +190,18 @@ with col_desc4:
 
 st.markdown("---")
 
-# Ubicación de Liberar Tope y Valuación Prototípica al lado
+# Ubicación de Liberar Tope, Valuación Prototípica y Última Liquidación 2025 en 3 columnas
 col_tope1, col_tope2, col_tope3 = st.columns(3)
 with col_tope1:
     var_tope = st.radio("Liberar Tope:", ["NO", "SI"])
 with col_tope2:
     var_prototipico = st.radio("Valuación Prototípica:", ["NO", "SI"])
+with col_tope3:
+    var_liq2025 = st.radio("Última liquidación 2025:", ["NO", "SI"])
+    if var_liq2025 == "SI":
+        entry_val_liq2025 = st.text_input("Valor Cuota 2025 ($):", "0,00")
+    else:
+        entry_val_liq2025 = "0,00"
 
 st.markdown("---")
 
@@ -217,9 +223,15 @@ try:
         if entry_sup_edificada
         else 0.0
     )
+    val_liq2025_num = (
+        float(entry_val_liq2025.replace(".", "").replace(",", "."))
+        if entry_val_liq2025
+        else 0.0
+    )
 except ValueError:
     sup_terreno_pre = 0.0
     sup_edificada_pre = 0.0
+    val_liq2025_num = 0.0
 
 if sup_terreno_pre <= 10000:
     val_terreno_proto = sup_terreno_pre * 5 * 1261.39
@@ -233,7 +245,6 @@ valuacion_calc_str = f"{valuacion_prototipica_calc:,.2f}".replace(
     ",", "X"
 ).replace(".", ",").replace("X", ".")
 
-# Si es prototípico SÍ, inyectamos el valor calculado sin deshabilitar el input para conservar el color normal
 if var_prototipico == "SI":
     default_val_valuacion = valuacion_calc_str
 else:
@@ -512,17 +523,28 @@ try:
         0.0,
         0.0,
     ]
-    sub_c_acumulado = tasa_mensual
+
+    # Si se seleccionó la opción de liquidación 2025, la cuota 1 toma base del valor manual + 10%
+    if var_liq2025 == "SI" and val_liq2025_num > 0:
+        sub_c_acumulado = round(val_liq2025_num * 1.10, 2)
+    else:
+        sub_c_acumulado = tasa_mensual
 
     for i in range(1, 13):
         pct = porcentajes_aumento[i - 1]
-        nombre_cuota = (
-            f"CUOTA {i} ({pct}%)".replace(".0%", "%")
-            if pct > 0
-            else f"CUOTA {i} (0%)"
-        )
+        
+        # Etiqueta visual del porcentaje de incremento según si es la cuota 1 con liq 2025 o el resto
+        if i == 1 and var_liq2025 == "SI":
+            nombre_cuota = "CUOTA 1 (10%)"
+        else:
+            nombre_cuota = (
+                f"CUOTA {i} ({pct}%)".replace(".0%", "%")
+                if pct > 0
+                else f"CUOTA {i} (0%)"
+            )
 
-        if pct > 0:
+        # Aplicar los incrementos a partir de la cuota 2
+        if i > 1 and pct > 0:
             sub_c_acumulado = round(sub_c_acumulado * (1.0 + (pct / 100.0)), 2)
 
         sub_c = sub_c_acumulado
@@ -538,7 +560,6 @@ try:
         prot_c = round(sub_c * 0.095, 2)
         salud_c = round(sub_c * 0.105, 2)
 
-        # Modificación del descuento Edenor a partir de la Cuota 5
         if i >= 5:
             if abs(monto_edenor - 4000.0) < 0.01:
                 m_edenor_c = 6000.0
