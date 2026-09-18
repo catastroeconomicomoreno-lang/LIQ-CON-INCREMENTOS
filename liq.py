@@ -39,7 +39,6 @@ st.markdown(
             gap: 8px !important;
         }
         
-        /* Cajas de resultados y celdas con texto fino/normal */
         .resultado-box {
             background-color: #ffffff !important;
             padding: 5px 10px !important;
@@ -54,7 +53,6 @@ st.markdown(
             min-height: 28px !important;
         }
         
-        /* Caja específica para la tabla alineada a la izquierda */
         .resultado-box-tabla {
             background-color: #ffffff !important;
             padding: 5px 8px !important;
@@ -207,7 +205,6 @@ with col_sup1:
 with col_sup2:
     entry_sup_edificada = st.text_input("Superficie Edificada (m²):", "0,00")
 
-# Cálculo preliminar de superficies
 try:
     sup_terreno_pre = (
         float(entry_sup_terreno.replace(".", "").replace(",", "."))
@@ -356,8 +353,8 @@ try:
         )
 
 
-    # --- VALOR DE LA CUOTA DIVIDIDO 1.10 ---
-    val_cuota_2025_auto = round(tasa_total / 1.10, 2)
+    # --- VALOR DE LA CUOTA DIVIDIDO 1.10 (BASADO EN TASA MENSUAL) ---
+    val_cuota_2025_auto = round(tasa_mensual / 1.10, 2)
     val_cuota_2025_auto_str = f"{val_cuota_2025_auto:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
 
     with col_sub4:
@@ -478,7 +475,6 @@ try:
         unsafe_allow_html=True,
     )
 
-    # --- TABLA DE CUOTAS ALINEADA A LA IZQUIERDA ---
     st.markdown("<br>", unsafe_allow_html=True)
 
     st.markdown(
