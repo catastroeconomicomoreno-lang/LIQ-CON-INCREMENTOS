@@ -366,7 +366,7 @@ try:
         total_cuota_1_std = 8900.0 if estado_sel == "BALDIO" else 4500.0
 
     # FÓRMULA SOLICITADA: Cuota 1 / 1.10
-    val_cuota_2025_auto = round(total_cuota_1_std / 1.10, 2)
+    val_cuota_2025_auto = round(tasa_mensual_1_std / 1.10, 2)
     val_cuota_2025_auto_str = f"{val_cuota_2025_auto:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
 
     with col_sub4:
