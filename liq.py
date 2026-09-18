@@ -356,17 +356,29 @@ try:
         )
 
 
-    # --- LÓGICA DEL CAMPO Y VALOR DE CUOTA 2025 ---
-    # Cálculo de la Cuota 1
-    sub_desc_c1_std = tasa_mensual - monto_bc - monto_da - monto_be
-    prot_c1_std = round(tasa_mensual * 0.095, 2)
-    salud_c1_std = round(tasa_mensual * 0.105, 2)
-    total_cuota_1_std = round(sub_desc_c1_std + prot_c1_std + salud_c1_std - monto_edenor, 2)
-    if var_tope == "NO" and total_cuota_1_std < 4500.0:
-        total_cuota_1_std = 8900.0 if estado_sel == "BALDIO" else 4500.0
+    # --- LÓGICA REVISADA DEL CAMPO Y VALOR DE CUOTA 2025 ---
+    # 1. Se desescala únicamente el subtotal mensual base dividiendo entre 1.10
+    subtotal_base_2025 = round(tasa_mensual / 1.10, 2)
 
-    # FÓRMULA SOLICITADA: Cuota 1 / 1.10
-    val_cuota_2025_auto = round(tasa_mensual_1_std / 1.10, 2)
+    # 2. Recálculo de descuentos con la base de 2025
+    m_bc_2025 = round(subtotal_base_2025 * 0.10, 2) if var_bc == "SI" else 0.0
+    base_da_2025 = subtotal_base_2025 - m_bc_2025
+    m_da_2025 = round(base_da_2025 * 0.10, 2) if var_da == "SI" else 0.0
+    base_be_2025 = base_da_2025 - m_da_2025
+    m_be_2025 = round(base_be_2025 * 0.05, 2) if var_be == "SI" else 0.0
+
+    sub_desc_2025 = subtotal_base_2025 - m_bc_2025 - m_da_2025 - m_be_2025
+
+    # 3. Recálculo de tasas de protección y salud con la base de 2025
+    prot_2025 = round(subtotal_base_2025 * 0.095, 2)
+    salud_2025 = round(subtotal_base_2025 * 0.105, 2)
+
+    # 4. Total calculado para Cuota 2025
+    val_cuota_2025_auto = round(sub_desc_2025 + prot_2025 + salud_2025 - monto_edenor, 2)
+
+    if var_tope == "NO" and val_cuota_2025_auto < 4500.0:
+        val_cuota_2025_auto = 8900.0 if estado_sel == "BALDIO" else 4500.0
+
     val_cuota_2025_auto_str = f"{val_cuota_2025_auto:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
 
     with col_sub4:
