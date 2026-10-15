@@ -39,9 +39,15 @@ st.markdown(
             gap: 8px !important;
         }
         
-        /* Limpiar el fondo gris de los inputs de texto y selects */
-        div[data-baseweb="input"] > div, div[data-baseweb="select"] > div {
+        /* Forzar fondo blanco y borde limpio en todos los inputs de texto y selectbox */
+        div[data-baseweb="input"], div[data-baseweb="input"] > div, 
+        div[data-baseweb="select"], div[data-baseweb="select"] > div,
+        input, select {
             background-color: #ffffff !important;
+            background: #ffffff !important;
+        }
+        
+        div[data-baseweb="input"] > div, div[data-baseweb="select"] > div {
             border-color: #cbd5e1 !important;
         }
         
@@ -535,10 +541,10 @@ try:
             nombre_cuota = "CUOTA 1 (10%)"
         else:
             nombre_cuota = (
-                f"CUOTA 1 ({pct}%)".replace(".0%", "%")
+                f"CUOTA {i} ({pct}%)".replace(".0%", "%")
                 if pct > 0
                 else f"CUOTA {i} (0%)"
-            ) # Corregido dinámicamente según índice i
+            )
 
         if i > 1 and pct > 0:
             sub_c_acumulado = round(sub_c_acumulado * (1.0 + (pct / 100.0)), 2)
