@@ -386,7 +386,7 @@ try:
 
     st.markdown("---")
     st.markdown(
-        "<p style='font-family: Arial, sans-serif; font-size: 14px; font-weight:"
+        "<p style='font-family: Arial, sans-serif; font-size: 13px; font-weight:"
         " normal; text-transform: uppercase; margin-bottom: 4px;'>BASE IMPONIBLE"
         " Y COEFICIENTES</p>",
         unsafe_allow_html=True,
