@@ -75,7 +75,7 @@ st.markdown(
             padding: 5px 8px !important;
             border: 1px solid #cbd5e1 !important;
             border-radius: 4px !important;
-            font-size: 11px !important;
+            font-size: 16px !important;
             text-transform: uppercase;
             min-height: 28px !important;
             display: flex;
@@ -125,7 +125,7 @@ st.markdown(
             body, .stApp, [data-testid="stAppViewContainer"] {
                 background-color: #ffffff !important;
                 color: #000000 !important;
-                font-size: 8pt !important;
+                font-size: 10pt !important;
             }
             header, [data-testid="stSidebar"], [data-testid="stHeader"], .stDeployButton, [data-testid="stDecoration"] {
                 display: none !important;
@@ -455,8 +455,8 @@ try:
     st.markdown(
         f"""
         <div class="resultado-box" style="border: 2px solid #1e293b !important; margin-top: 4px; padding: 6px 10px;">
-            <span class="resultado-label" style="font-size: 13px;">TSG Total:</span>
-            <span class="resultado-valor" style="font-size: 13px;">{tasa_total_str}</span>
+            <span class="resultado-label" style="font-size: 14px;">TSG Total:</span>
+            <span class="resultado-valor" style="font-size: 14px;">{tasa_total_str}</span>
         </div>
         """,
         unsafe_allow_html=True,
