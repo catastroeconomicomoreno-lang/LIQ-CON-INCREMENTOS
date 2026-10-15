@@ -386,7 +386,7 @@ try:
 
     st.markdown("---")
     st.markdown(
-        "<p style='font-family: Arial, sans-serif; font-size: 13px; font-weight:"
+        "<p style='font-family: Arial, sans-serif; font-size: 11px; font-weight:"
         " normal; text-transform: uppercase; margin-bottom: 4px;'>BASE IMPONIBLE"
         " Y COEFICIENTES</p>",
         unsafe_allow_html=True,
@@ -455,8 +455,8 @@ try:
     st.markdown(
         f"""
         <div class="resultado-box" style="border: 2px solid #1e293b !important; margin-top: 4px; padding: 6px 10px;">
-            <span class="resultado-label" style="font-size: 13px;">TSG Total:</span>
-            <span class="resultado-valor" style="font-size: 13px;">{tasa_total_str}</span>
+            <span class="resultado-label" style="font-size: 11px;">TSG Total:</span>
+            <span class="resultado-valor" style="font-size: 11px;">{tasa_total_str}</span>
         </div>
         """,
         unsafe_allow_html=True,
