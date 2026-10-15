@@ -20,13 +20,13 @@ st.markdown(
         label, p, span, div, [data-testid="stWidgetLabel"] p, .stMarkdown p {
             font-family: Arial, sans-serif !important;
             color: #1e293b !important;
-            font-size: 12px !important;
+            font-size: 14px !important;
         }
         
         div[data-testid="stMarkdownContainer"] p, .stRadio label {
             font-family: Arial, sans-serif !important;
             color: #1e293b !important;
-            font-size: 12px !important;
+            font-size: 14px !important;
         }
         
         [data-testid="stWidgetLabel"] {
@@ -92,7 +92,7 @@ st.markdown(
             text-align: center;
             margin-bottom: 4px;
             border-radius: 4px;
-            font-size: 12px !important;
+            font-size: 14px !important;
             box-shadow: 0 1px 2px rgba(0,0,0,0.04);
         }
         
@@ -100,14 +100,14 @@ st.markdown(
             font-family: Arial, sans-serif !important;
             color: #1e293b !important;
             font-weight: normal !important;
-            font-size: 12px !important;
+            font-size: 14px !important;
         }
         
         .resultado-valor {
             font-family: Arial, sans-serif !important;
             color: #1e293b !important;
             font-weight: normal !important;
-            font-size: 12px !important;
+            font-size: 14px !important;
         }
         
         .stButton>button {
@@ -118,7 +118,7 @@ st.markdown(
             border: none !important;
             padding: 6px 12px !important;
             width: 100% !important;
-            font-size: 12px !important;
+            font-size: 14px !important;
         }
 
         @media print {
