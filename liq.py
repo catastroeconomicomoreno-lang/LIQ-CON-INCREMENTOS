@@ -41,7 +41,7 @@ st.markdown(
         
         .resultado-box {
             background-color: #ffffff !important;
-            padding: 5px 10px !important;
+            padding: 6px 10px !important;
             border-radius: 4px !important;
             border: 1px solid #cbd5e1 !important;
             margin-bottom: 3px !important;
@@ -50,12 +50,12 @@ st.markdown(
             align-items: center !important;
             box-shadow: 0 1px 2px rgba(0,0,0,0.04) !important;
             text-align: center !important;
-            min-height: 28px !important;
+            min-height: 36px !important;
         }
         
         .resultado-box-tabla {
             background-color: #ffffff !important;
-            padding: 5px 8px !important;
+            padding: 6px 8px !important;
             border-radius: 4px !important;
             border: 1px solid #cbd5e1 !important;
             margin-bottom: 3px !important;
@@ -64,7 +64,7 @@ st.markdown(
             align-items: center !important;
             box-shadow: 0 1px 2px rgba(0,0,0,0.04) !important;
             text-align: left !important;
-            min-height: 28px !important;
+            min-height: 36px !important;
         }
         
         .tabla-header {
@@ -72,12 +72,12 @@ st.markdown(
             color: #1e293b !important;
             font-weight: normal;
             text-align: left;
-            padding: 5px 8px !important;
+            padding: 6px 8px !important;
             border: 1px solid #cbd5e1 !important;
             border-radius: 4px !important;
-            font-size: 16px !important;
+            font-size: 15px !important;
             text-transform: uppercase;
-            min-height: 28px !important;
+            min-height: 36px !important;
             display: flex;
             align-items: center;
             justify-content: flex-start;
@@ -116,7 +116,7 @@ st.markdown(
             font-weight: normal !important;
             border-radius: 4px !important;
             border: none !important;
-            padding: 6px 16px !important;
+            padding: 6px 12px !important;
             width: 100% !important;
             font-size: 16px !important;
         }
@@ -386,7 +386,7 @@ try:
 
     st.markdown("---")
     st.markdown(
-        "<p style='font-family: Arial, sans-serif; font-size: 11px; font-weight:"
+        "<p style='font-family: Arial, sans-serif; font-size: 16px; font-weight:"
         " normal; text-transform: uppercase; margin-bottom: 4px;'>BASE IMPONIBLE"
         " Y COEFICIENTES</p>",
         unsafe_allow_html=True,
@@ -455,8 +455,8 @@ try:
     st.markdown(
         f"""
         <div class="resultado-box" style="border: 2px solid #1e293b !important; margin-top: 4px; padding: 6px 10px;">
-            <span class="resultado-label" style="font-size: 11px;">TSG Total:</span>
-            <span class="resultado-valor" style="font-size: 11px;">{tasa_total_str}</span>
+            <span class="resultado-label" style="font-size: 17px;">TSG Total:</span>
+            <span class="resultado-valor" style="font-size: 17px;">{tasa_total_str}</span>
         </div>
         """,
         unsafe_allow_html=True,
