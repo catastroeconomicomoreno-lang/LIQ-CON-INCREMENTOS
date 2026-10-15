@@ -20,13 +20,13 @@ st.markdown(
         label, p, span, div, [data-testid="stWidgetLabel"] p, .stMarkdown p {
             font-family: Arial, sans-serif !important;
             color: #1e293b !important;
-            font-size: 14px !important;
+            font-size: 16px !important;
         }
         
         div[data-testid="stMarkdownContainer"] p, .stRadio label {
             font-family: Arial, sans-serif !important;
             color: #1e293b !important;
-            font-size: 14px !important;
+            font-size: 16px !important;
         }
         
         [data-testid="stWidgetLabel"] {
@@ -92,7 +92,7 @@ st.markdown(
             text-align: center;
             margin-bottom: 4px;
             border-radius: 4px;
-            font-size: 14px !important;
+            font-size: 16px !important;
             box-shadow: 0 1px 2px rgba(0,0,0,0.04);
         }
         
@@ -100,14 +100,14 @@ st.markdown(
             font-family: Arial, sans-serif !important;
             color: #1e293b !important;
             font-weight: normal !important;
-            font-size: 14px !important;
+            font-size: 16px !important;
         }
         
         .resultado-valor {
             font-family: Arial, sans-serif !important;
             color: #1e293b !important;
             font-weight: normal !important;
-            font-size: 14px !important;
+            font-size: 16px !important;
         }
         
         .stButton>button {
@@ -116,9 +116,9 @@ st.markdown(
             font-weight: normal !important;
             border-radius: 4px !important;
             border: none !important;
-            padding: 6px 12px !important;
+            padding: 6px 16px !important;
             width: 100% !important;
-            font-size: 14px !important;
+            font-size: 16px !important;
         }
 
         @media print {
@@ -386,7 +386,7 @@ try:
 
     st.markdown("---")
     st.markdown(
-        "<p style='font-family: Arial, sans-serif; font-size: 12px; font-weight:"
+        "<p style='font-family: Arial, sans-serif; font-size: 16px; font-weight:"
         " normal; text-transform: uppercase; margin-bottom: 4px;'>BASE IMPONIBLE"
         " Y COEFICIENTES</p>",
         unsafe_allow_html=True,
